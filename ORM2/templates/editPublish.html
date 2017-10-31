@@ -1,0 +1,34 @@
+{% extends "Dashboard.html" %}
+
+{% block content %}
+    <div class="row" id="rowContent">
+        <div class="col-md-6 col-md-offset-3">
+            <form class="form-horizontal" action="/appPublish/editPublish/?id={{publishObj.id  }}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="inputName" class="col-sm-2 control-label">名称:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputName" placeholder="Name" name="name" value="{{ publishObj.name }}">
+                    </div>
+                </div>
+
+                
+                 <div class="form-group">
+                    <label for="inputAddr" class="col-sm-2 control-label">地址:</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="inputAddr" name="addr" placeholder="Addr"  value="{{ publishObj.addr }}">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+{% endblock content %}
