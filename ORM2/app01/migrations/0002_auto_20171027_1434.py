@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('appBook', '0001_initial'),
+        ('app01', '0001_initial'),
     ]
 
     operations = [
@@ -25,6 +25,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='book',
             name='authors',
-            field=models.ManyToManyField(to='appBook.Author'),
+            field=models.ManyToManyField(to='app01.Author'),
         ),
     ]

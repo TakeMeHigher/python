@@ -15,13 +15,17 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-from appBook import views
+from app01 import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^index/', views.index), 
-    url(r'^appBook/', include("appBook.urls")),
+    # url(r'^index/', views.index), 
+    url(r'^app01/', include("app01.urls")),
     url(r'^appAuthor/', include("appAuthor.urls")),
     url(r'^appPublish/', include("appPublish.urls")),
+    url(r'^login/', views.Login),
+    url(r'^logout/', views.Logout),
+    url(r'^changpwd/', views.changpwd),
+    url(r'^reg/', views.reg),
     
 ]

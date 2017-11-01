@@ -15,11 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url,include
 from django.contrib import admin
-from appBook import views
+from app01 import views
 
 urlpatterns = [
     # url(r'^admin/', admin.site.urls),
-    # url(r'^index/', views.index),
+    url(r'^index/', views.index),
     url(r'^BookList/', views.BookList),
     url(r'^addBook/', views.addBook),
     url(r'^delBook/', views.delBook),

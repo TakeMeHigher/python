@@ -35,6 +35,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='book',
             name='publish',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='appBook.Publish'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='app01.Publish'),
         ),
     ]

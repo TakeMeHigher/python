@@ -1,52 +1,97 @@
 {% extends "Dashboard.html" %}
-
-
 {% block content %}
- <div class="panel panel-primary">
-                <div class="panel-heading">出版社列表</div>
-                <div class="panel-body">
+    <div class="panel panel-primary">
+        <div class="panel-heading">出版社列表</div>
+        <div class="panel-body">
 
-                    <!-- 表格上面的按钮-->
+            <!-- 表格上面的按钮-->
 
-                    <div class="row my-table-tool">
-                        <div class="col-md-12">
-                            <a href="/appPublish/addPublish/">
-                                <button class="btn btn-success" data-toggle="modal" data-target="#myModal">添加</button>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="table-responsive table-bordered">
-                        <table id="t1" class="table table-striped table-bordered">
-                            <thead>
-                            <tr>
-                                <th>编号</th>
-                                <th>名称</th>
-                                <th>地址</th>
-                                <th>操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for publish in publishList %}
-                                <tr>
-                                    <td>{{ forloop.counter }}</td>
-                                    <td>{{ publish.name }}</td>
-                                    <td>{{ publish.addr }}</td>
-                                    <td>
-                                        <a href="/appPublish/editPublish/?id={{ publish.id }}">
-                                            <button class="btn btn-warning">编辑</button>
-                                        </a>
-                                        <a href="/appPublish/delPublish/?id={{ publish.id }}">
-                                            <button class="btn btn-danger">删除</button>
-                                        </a>
-                                    </td>
-                                </tr>
-
-                            {% endfor %}
-
-                            </tbody>
-                        </table>
-                    </div>
+            <div class="row my-table-tool">
+                <div class="col-md-12">
+                    <a href="/appPublish/addPublish/">
+                        <button class="btn btn-success" data-toggle="modal" data-target="#myModal">添加</button>
+                    </a>
                 </div>
             </div>
+
+            <div class="table-responsive table-bordered">
+                <table id="t1" class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>编号</th>
+                        <th>名称</th>
+                        <th>地址</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for publish in publishList %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ publish.name }}</td>
+                            <td>{{ publish.addr }}</td>
+                            <td>
+                                <a href="/appPublish/editPublish/?id={{ publish.id }}">
+                                    <button class="btn btn-warning">编辑</button>
+                                </a>
+                                <a href="/appPublish/delPublish/?id={{ publish.id }}">
+                                    <button class="btn btn-danger">删除</button>
+                                </a>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Page navigation" id="paging">
+        <ul class="pagination">
+            <li><a href="/appPublish/PublishList/?page=1">首页</a></li>
+            {% if publishList.has_previous %}
+                <li>
+                    <a href="/appPublish/PublishList/?page={{ publishList.previous_page_number }}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                    <a href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for page in page_range %}
+                {% if currentPage == page %}
+                    <li class="active"><a href="/appPublish/PublishList?page={{ page }}">{{ page }}</a></li>
+                {% else %}
+                    <li><a href="/appPublish/PublishList?page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+
+
+            {% endfor %}
+
+            {% if publishList.has_next %}
+                <li>
+                    <a href="/appPublish/PublishList/?page={{ publishList.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% else %}
+
+                <li class="disabled">
+                    <a href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+
+            <li><a href="/appPublish/PublishList/?page={{ pageNum }}">尾页</a></li>
+            <li><span>共{{ pageNum }}页</span></li>
+
+        </ul>
+    </nav>
 {% endblock content %}

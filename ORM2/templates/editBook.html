@@ -3,7 +3,7 @@
 {% block content %}
     <div class="row" id="rowContent">
         <div class="col-md-6 col-md-offset-3">
-            <form class="form-horizontal" action="/appBook/editBook/?id={{ book.id }}" method="post">
+            <form class="form-horizontal" action="/app01/editBook/?id={{ book.id }}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="inputTitle" class="col-sm-2 control-label">书名:</label>

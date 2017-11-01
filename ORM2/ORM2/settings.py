@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'appBook.apps.App01Config',
+    'app01.apps.App01Config',
 ]
 
 MIDDLEWARE = [
@@ -84,12 +84,12 @@ WSGI_APPLICATION = 'ORM2.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': "newblog",
-        "USER":"root",
-        "PASSWORD":"root",
-        "HOST":"",
-        "PORT":"3306"
+        'ENGINE': 'django.db.backends.mysql',#对应的数据库
+        'NAME': "newblog",#自己数据名称
+        "USER":"root",#用户名
+        "PASSWORD":"root",#密码
+        "HOST":"",#主机好 默认本机
+        "PORT":"3306"#端口
     }
 }
 
