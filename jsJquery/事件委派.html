@@ -1,0 +1,32 @@
+<ul>
+    <li>1</li>
+    <li>2</li>
+    <li>3</li>
+</ul>
+<hr>
+<button id="add_li">Add_li</button>
+<button id="off">off</button>
+
+<script src="jquery-3.2.1.min.js"></script>
+<script>
+    $("ul li").click(function(){
+        alert(123)
+    });
+
+    $("#add_li").click(function(){
+        var $ele=$("<li>");
+        $ele.text(Math.round(Math.random()*10));
+        $("ul").append($ele)
+
+    });
+
+
+//    $("ul").on("click","li",function(){
+//        alert(456)
+//    })
+
+     $("#off").click(function(){
+         $("ul li").off()
+     })
+
+</script>

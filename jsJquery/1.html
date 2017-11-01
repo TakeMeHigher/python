@@ -1,0 +1,235 @@
+<div class="shade hide"></div>
+<div class="container add_model hide">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="background-color: #2e6da4">
+                    <h3 class="panel-title">基本信息</h3>
+
+                </div>
+                <div class="panel-body" style="border: 1px solid #337ab7">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <form class="form-horizontal">
+
+                                <div class="form-group">
+                                    <label for="addNumber" class="col-sm-3 control-label">编号</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="addNumber" placeholder="Number">
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="addName" class="col-sm-3 control-label">用户名</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="addName" placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addEmail" class="col-sm-3 control-label">邮箱</label>
+                                    <div class="col-sm-9">
+                                        <input type="email" class="form-control" id="addEmail" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="addHoppy" class="col-sm-3 control-label">爱好</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="addHoppy" placeholder="Hoppy">
+                                    </div>
+                                </div>
+
+                                <button type="button" class="btn btn-info" id="add_btn_sub" style="margin-left: 300px">
+                                    提交
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="container update_model hide">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="panel panel-default">
+                <div class="panel-heading" style="background-color: #2e6da4">
+                    <h3 class="panel-title">基本信息</h3>
+
+                </div>
+                <div class="panel-body" style="border: 1px solid #337ab7">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <form class="form-horizontal">
+                                <div class="form-group">
+                                    <label for="updateName" class="col-sm-3 control-label">用户名</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="updateName" placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="updateEmail" class="col-sm-3 control-label">邮箱</label>
+                                    <div class="col-sm-9">
+                                        <input type="email" class="form-control" id="updateEmail" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="updateHoppy" class="col-sm-3 control-label">爱好</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control" id="updateHoppy" placeholder="Hoppy">
+                                    </div>
+                                </div>
+
+                                <button type="button" class="btn btn-info" id="update_btn_sub"
+                                        style="margin-left: 300px">提交修改
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+<script>
+    $("#add_btn").on("click", function () {
+        $(".shade").removeClass("hide");
+        $(".add_model").removeClass("hide");
+        $("#main_div").addClass("hide")
+    });
+
+    $("#add_btn_sub").on("click", function () {
+        var number = $("#addNumber").val();
+        var username = $("#addName").val();
+        var email = $("#addEmail").val();
+        var hobby = $("#addHoppy").val();
+
+        var $tr = $("<tr></tr>");
+        var $td1 = $("<td></td>");
+        var $td2 = $("<td></td>");
+        var $td3 = $("<td></td>");
+        var $td4 = $("<td></td>");
+        var $td5 = $("<td></td>");
+
+        $td1.text(number);
+        $td2.text(username);
+        $td3.text(email);
+        $td4.text(hobby);
+
+        var $out_div = $("<div class='text-center'></div>");
+
+        var $inner_div = $("<div class='btn-group' role='group' ></div>");
+
+        var $btn1 = $("<button type='button' class='btn btn-success update_btn'>编辑</button>&nbsp;&nbsp;&nbsp;");
+
+        var $btn2 = $("<button type='button' class='btn btn-danger del_btn'>删除</button>");
+
+        var $span1 = $("<span class='glyphicon glyphicon-pencil'></span>");
+
+        var $span2 = $(" <span class='glyphicon glyphicon-remove'></span>");
+
+        $btn1.prepend($span1);
+        $btn2.prepend($span2);
+
+        $inner_div.append($btn1);
+        $inner_div.append($btn2);
+
+        $out_div.append($inner_div);
+
+        $td5.append($out_div);
+
+
+        $tr.append($td1);
+        $tr.append($td2);
+        $tr.append($td3);
+        $tr.append($td4);
+        $tr.append($td5);
+
+        $("#tbody").append($tr);
+
+
+        $(".shade").addClass("hide");
+        $(".add_model").addClass("hide");
+        $("#main_div").removeClass("hide");
+
+        $(".del_btn").on("click", function () {
+            $(this).parentsUntil("tbody").empty()
+        });
+
+        $(".update_btn").on("click", function () {
+            $(".shade").removeClass("hide");
+            $(".update_model").removeClass("hide");
+            $("#main_div").addClass("hide");
+
+            $tr = $(this).parentsUntil("tbody").filter("tr");
+            $tds = $tr.children();
+            $td_name = $tds.eq(1);
+            $td_email = $tds.eq(2);
+            $td_hobby = $tds.eq(3);
+
+            $("#updateName").val($td_name.text());
+            $("#updateEmail").val($td_email.text());
+            $("#updateHoppy").val($td_hobby.text());
+
+
+            $("#update_btn_sub").on("click", function () {
+                $td_name.text($("#updateName").val());
+                $td_email.text($("#updateEmail").val());
+                $td_hobby.text($("#updateHoppy").val());
+                $(".shade").addClass("hide");
+                $(".update_model").addClass("hide");
+                $("#main_div").removeClass("hide");
+
+
+            });
+
+        });
+    });
+</script>
+
+<script>
+    $(".del_btn").on("click", function () {
+        $(this).parentsUntil("tbody").empty()
+    });
+</script>
+
+<script>
+
+
+    $(".update_btn").on("click", function () {
+        $(".shade").removeClass("hide");
+        $(".update_model").removeClass("hide");
+        $("#main_div").addClass("hide");
+
+        $tr = $(this).parentsUntil("tbody").filter("tr");
+        $tds = $tr.children();
+        $td_name = $tds.eq(1);
+        $td_email = $tds.eq(2);
+        $td_hobby = $tds.eq(3);
+
+        $("#updateName").val($td_name.text());
+        $("#updateEmail").val($td_email.text());
+        $("#updateHoppy").val($td_hobby.text());
+
+
+        $("#update_btn_sub").on("click", function () {
+            $td_name.text($("#updateName").val());
+            $td_email.text($("#updateEmail").val());
+            $td_hobby.text($("#updateHoppy").val());
+            $(".shade").addClass("hide");
+            $(".update_model").addClass("hide");
+            $("#main_div").removeClass("hide");
+
+
+        });
+
+    });
+
+
+</script>
