@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <style>
+        #firstdiv {
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row col-md-3 col-md-offset-4" id="firstdiv">
+        <form action="/login/" method="post">
+            {% csrf_token %}
+        <div class="form-group  out_div">
+            <label class="control-label" for="username">用户名</label>
+            <input type="text" class="form-control input_class" id="username"  name="user" aria-describedby="helpBlock2">
+            <span id="helpBlock1" class="help-block hide"></span>
+        </div>
+        <div class="form-group  out_div">
+            <label class="control-label" for="pwd">密码</label>
+            <input type="text" class="form-control input_class" id="pwd" name="pwd">
+            <span id="helpBlock2" class="help-block hide"></span>
+        </div>
+            <button type="submit" id="sub_btn" class="btn btn-primary" style="width: 255px">登录</button>
+        </form>
+        <h3>还没有账号去<a href="/reg/" style="color: red">注册</a>？</h3>
+        <p>{{ msg }}</p>
+    </div>
+</div>
+</body>
+<script src="/static/jquery-3.2.1.min.js"></script>
+<script>
+    $("#sub_btn").on("click",function () {
+
+       $(".out_div").each(function () {
+           $(this).removeClass("has-error");
+             $(this).children("span").text("");
+              var value= $(this).children("input").val();
+              var labelText=$(this).children("label").text();
+           if (!value){
+               $(this).children("span").removeClass("hide");
+               $(this).children("span").text(labelText+"不能为空");
+               $(this).addClass("has-error");
+               return false;
+           }
+
+       });
+    })
+</script>
+</html>

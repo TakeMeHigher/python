@@ -1,0 +1,101 @@
+{% extends "Dashboard.html" %}
+
+
+{% block content %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">老师列表</div>
+        <div class="panel-body">
+
+            <!-- 表格上面的按钮-->
+
+            <div class="row my-table-tool">
+                <div class="col-md-12">
+                    <a href="/appTeacher/TeacherList/">
+                        <button class="btn btn-success" data-toggle="modal" data-target="#myModal">返回</button>
+                    </a>
+                </div>
+            </div>
+
+            <div class="table-responsive table-bordered">
+                <table id="t1" class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>工号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>年龄</th>
+                        <th>薪水</th>
+                        <th>邮箱</th>
+                        <th>电话</th>
+                        <th>地址</th>
+                        <th>所带班级</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ teacher.id }}</td>
+                            <td>{{ teacher.tname }}</td>
+                            <td>{{ teacher.sex }}</td>
+                            <td>{{ teacher.age }}</td>
+                            <td>{{ teacher.sal }}</td>
+                            <td>{{ teacher.email }}</td>
+                            <td>{{ teacher.phone }}</td>
+                            <td>{{ teacher.addr }}</td>
+                            <td>
+                                {% for class in classes %}
+                                     {{ class.cname }}
+                                {% endfor %}
+
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{#    <nav aria-label="Page navigation" id="paging">#}
+{#        <ul class="pagination">#}
+{#        <li><a href="/app01/BookList/?page=1">首页</a></li>#}
+{#            {% if BookList.has_previous %}#}
+{#                <li>#}
+{#                    <a href="/app01/BookList/?page={{ BookList.previous_page_number }}" aria-label="Previous">#}
+{#                        <span aria-hidden="true">&laquo;</span>#}
+{#                    </a>#}
+{#                </li>#}
+{#            {% else %}#}
+{#                <li class="disabled">#}
+{#                    <a href="#" aria-label="Previous">#}
+{#                        <span aria-hidden="true">&laquo;</span>#}
+{#                    </a>#}
+{#                </li>#}
+{#            {% endif %}#}
+{#            {% for page in page_range %}#}
+{#                {% if num == page %}#}
+{#                    <li class="active"><a href="/app01/BookList?page={{ page }}">{{ page }}</a></li>#}
+{#                {% else %}#}
+{#                    <li><a href="/app01/BookList?page={{ page }}">{{ page }}</a></li>#}
+{#                {% endif %}#}
+{##}
+{##}
+{#            {% endfor %}#}
+{#            {% if BookList.has_next %}#}
+{#                <li>#}
+{#                    <a href="/app01/BookList/?page={{ BookList.next_page_number }}" aria-label="Next">#}
+{#                        <span aria-hidden="true">&raquo;</span>#}
+{#                    </a>#}
+{#                </li>#}
+{#            {% else %}#}
+{##}
+{#                <li class="disabled">#}
+{#                    <a href="#" aria-label="Next">#}
+{#                        <span aria-hidden="true">&raquo;</span>#}
+{#                    </a>#}
+{#                </li>#}
+{#            {% endif %}#}
+{##}
+{#        <li><a href="/app01/BookList/?page={{ pageNum }}">尾页</a></li>#}
+{#        <li> <span>共{{ pageNum }}页</span></li>#}
+{#        </ul>#}
+{#    </nav>#}
+{% endblock content %}
