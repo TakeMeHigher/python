@@ -1,0 +1,77 @@
+{% extends "Dashboard.html" %}
+
+{% block content %}
+    <div class="row" id="rowContent">
+        <div class="col-md-6 col-md-offset-3">
+            <form class="form-horizontal" action="/appHeadmaster/addHm/?id={{ id }}"  method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="Name" class="col-sm-2 control-label">姓名:</label>
+                    <div class="col-sm-10">
+                       {{ form.username }}{{ form.errors.username.0 }}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="Pwd" class="col-sm-2 control-label">密码:</label>
+                    <div class="col-sm-10">
+                       {{ form.password }}{{ form.errors.password.0 }}
+                    </div>
+                </div>
+
+
+                 <div class="form-group">
+                    <label for="inputPublishDate" class="col-sm-2 control-label">性别:</label>
+                    <div class="col-sm-10">
+                        {{ form.sex }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputTitle" class="col-sm-2 control-label">年龄:</label>
+                    <div class="col-sm-10">
+                        {{ form.age }}{{ form.errors.age.0 }}
+                    </div>
+                </div>
+
+
+
+               <div class="form-group">
+                    <label for="inputTitle" class="col-sm-2 control-label">邮箱:</label>
+                    <div class="col-sm-10">
+                      {{ form.email }}{{ form.errors.email.0 }}
+                    </div>
+                </div>
+
+
+
+
+                <div class="form-group">
+                    <label for="inputPublish" class="col-sm-2 control-label">分配班级:</label>
+                    <div class="col-sm-10">
+{#                        <select name="cls" id="" multiple>#}
+{#                            {% for cls in classlist %}#}
+{#                                <option value="{{ cls.id }}">{{ cls.caption }}</option>#}
+{#                            {% endfor %}#}
+{##}
+{#                        </select>#}
+                        {{ form.cls_id }}
+                    </div>
+                </div>
+                
+
+                
+
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-default">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+{% endblock content %}

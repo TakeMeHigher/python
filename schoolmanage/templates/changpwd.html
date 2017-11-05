@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>修改密码</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <style>
+        .container-fluid{
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3 col-md-offset-4">
+        <form action="/changpwd/" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="Old_password">Old_password</label>
+                <input type="text" class="form-control" id="Old_password" placeholder="Old_password" name="oldpwd">
+            </div>
+            <div class="form-group">
+                <label for="New_password">New_password</label>
+                <input type="text" class="form-control" id="New_password" placeholder="New_password" name="newpwd">
+            </div>
+            <div class="form-group">
+                <label for="Repeat_password">Repeat_password</label>
+                <input type="text" class="form-control" id="Repeat_password" placeholder="Repeat_password" name="repeatpwd">
+            </div>
+            <button type="submit" class="btn btn-default">确认修改</button>
+        </form>
+            <h3 style="color: red">{{ msg }}</h3>
+            </div>
+
+    </div>
+
+</div>
+</body>
+</html>
