@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from app01 import  models
 from django.forms import Form,fields,widgets
 from app01.views import auth
@@ -20,8 +20,8 @@ class StuForm(Form):
                             )
     cls_id=fields.ChoiceField(choices=[],widget=widgets.Select)
 
-    def __index__(self,*args,**kwargs):
-        super().__init__(self,*args,**kwargs)
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
         self.fields["cls_id"].choices=models.ClassList.objects.all().values_list("id","caption")
 
 def StudentList(request):
@@ -51,6 +51,7 @@ def StudentList(request):
 def addStudent(request):
     if request.method=="GET":
         form=StuForm()
+        print(form["cls_id"],"**********************")
         return render(request,"addStudent.html",{"form":form})
     form=StuForm(request.POST)
     if form.is_valid():
@@ -81,7 +82,6 @@ def editStudent(request):
 
 def delStudent(request):
     id=request.GET.get("id")
-    print(id)
-
+    print(id,"-------------------------")
     models.Student.objects.filter(id=id).delete()
-    return redirect("/appStudent/StudentList/")
+    return HttpResponse("ok")

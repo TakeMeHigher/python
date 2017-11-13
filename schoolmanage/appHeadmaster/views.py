@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from app01 import models
 from app01.views import auth
 from django.forms import Form,fields,widgets
@@ -41,9 +41,6 @@ def HeadMasterList(request):
     return render(request, "hmList.html",{"hms":hms,"pagepermission":pagepermission})
 
 
-def HeadMasterList(request):
-    hms=models.UserInfo.objects.filter(ut_id=1).all()
-    return render(request, "hmList.html",{"hms":hms})
 
 
 def addHeadMaster(request):
@@ -88,5 +85,6 @@ def editHeadMaster(request):
 
 def delHeadMaster(request):
     id=request.GET.get("id")
+    print(id,"--------------------------------- ")
     models.UserInfo.objects.filter(id=id).delete()
-    return redirect("/appHeadmaster/hmList/")
+    return HttpResponse("ok")

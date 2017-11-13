@@ -35,9 +35,10 @@
                         <th>操作</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="tbody">
                     {% for stu in students %}
                         <tr>
+                            <td class="hide hideId">{{ stu.id }}</td>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ stu.name }}</td>
                             <td>{{ stu.get_sex_display }}</td>
@@ -46,16 +47,16 @@
                             <td>{{ stu.cls.caption }}</td>
                             <td>{{ stu.cls.headmaster.username }}</td>
                             <td>
-                {% if pagepermission.has_edit %}
+                                {% if pagepermission.has_edit %}
                                     <a href="/appStudent/editStudent/?id={{ stu.id }}">
                                         <button class="btn btn-warning">编辑</button>
                                     </a>
                                 {% endif %}
 
                                 {% if pagepermission.has_del %}
-                                    <a href="/appStudent/delStudent/?id={{ stu.id }}">
-                                        <button class="btn btn-danger">删除</button>
-                                    </a>
+                                    {#                                    <a href="/appStudent/delStudent/?id={{ stu.id }}">#}
+                                    <button class="btn btn-danger del">删除</button>
+                                    {#                                    </a>#}
                                 {% endif %}
 
 
@@ -117,3 +118,25 @@
         </ul>
     </nav>
 {% endblock content %}
+
+{% block js %}
+    <script src="/static/jquery-3.2.1.min.js"></script>
+    <script>
+        $(".del").click(function () {
+            var tr = $(this).parent().parent();
+            sid=tr.children().first("td").text();
+            $.ajax({
+                url: "/appStudent/delStudent/",
+                type: 'GET',
+                data: {id:sid},
+                success: function (data) {
+                    if (data == "ok") {
+                        tr.remove()
+                    }
+                }
+            })
+        })
+
+    </script>
+
+{% endblock %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,HttpResponse
 from app01 import models
 from app01.views import auth
 from django.core.paginator import  Paginator
@@ -66,7 +66,7 @@ class TeacherForm(Form):
         self.fields["teacher_to_cls_id"].choices  =models.ClassList.objects.all().values_list("id","caption")
 
 
-@auth
+
 def addTeacher(request):
     if request.method == "GET":
         form = TeacherForm()
@@ -120,4 +120,4 @@ def editTeacher(request):
 def delTeacher(request):
     id = request.GET.get("id")
     models.UserInfo.objects.filter(id=id).delete()
-    return redirect("/appTeacher/TeacherList/")
+    return HttpResponse("ok")

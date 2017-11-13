@@ -51,9 +51,7 @@
 
 
 
-        .menu  {
-{#            padding-right: 40px;#}
-{#            padding-left: 40px;#}
+        .menu {
             height:60px;
             width: 200px;
             margin-top: 100px;
@@ -103,6 +101,8 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">学生管理系统</a>
+
+
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -131,6 +131,8 @@
                <h1>{{ request.session.userinfo.username }}欢迎来到本系统!</h1>
            {% endblock content %}
         </div>
+
+
     </div>
 </div>
 
@@ -144,8 +146,10 @@
 <script src="/static/Dashboard_files/holder.min.js"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="/static/Dashboard_files/ie10-viewport-bug-workaround.js"></script>
-<<<<<<< HEAD
 <script src="/static/rbac/rbac.js"></script>
 
+{% block js %}
+
+{% endblock js %}
 </body>
 </html>

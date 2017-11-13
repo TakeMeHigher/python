@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,HttpResponse
 from app01 import models
 from app01.views import auth
 from django.forms import Form
@@ -12,10 +12,7 @@ def ClassList(request):
     pagepermission = BasePagePermission(request.permission_code_list)
     return render(request,"ClassList.html",{"clss":clss,"pagepermission":pagepermission})
 # Create your views here.
-@auth
-def ClassList(request):
-    clss=models.ClassList.objects.all()
-    return render(request,"ClassList.html",{"clss":clss})
+
 
 
 class ClassForm(Form):
@@ -23,7 +20,7 @@ class ClassForm(Form):
                              widget=widgets.TextInput(attrs={"placeholder":"班级名称","class":"form-control"})
                              )
 
-    headmaster_id=fields.ChoiceField(choices=models.UserInfo.objects.filter(ut_id=1).all().values_list("id","username"),
+    headmaster_id=fields.ChoiceField(choices=[],
                                      widget=widgets.Select)
 
     teacher_ids=fields.MultipleChoiceField(choices=[])
@@ -31,6 +28,7 @@ class ClassForm(Form):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.fields["teacher_ids"].choices=models.UserInfo.objects.filter(ut_id=2).all().values_list("id","username")
+        self.fields["headmaster_id"].choices=models.UserInfo.objects.filter(ut_id=1).all().values_list("id","username")
 
 
 def editClass(request):
@@ -66,6 +64,7 @@ def editClass(request):
 def addClass(request):
     if request.method=="GET":
         form=ClassForm()
+        print(form["headmaster_id"],"```````````````````````")
         return render(request,"addClass.html",{"form":form})
     form=ClassForm(request.POST)
     if form.is_valid():
@@ -86,4 +85,4 @@ def addClass(request):
 def delClass(request):
     id=request.GET.get("id")
     models.ClassList.objects.filter(id=id).delete()
-    return redirect("/appClass/ClassList/")
+    return HttpResponse("ok")
