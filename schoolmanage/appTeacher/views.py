@@ -2,9 +2,8 @@ from django.shortcuts import render, redirect
 from app01 import models
 from app01.views import auth
 from django.core.paginator import  Paginator
-
+from rbac.baseUpdate import BasePagePermission
 # Create your views here.
-@auth
 def TeacherList(request):
     # t=[]
     # for i in range(30):
@@ -25,7 +24,9 @@ def TeacherList(request):
     else:
         page_range=paginator.page_range
     teachers=paginator.page(num)
-    return render(request, "TeacherList.html", {"teachers": teachers,"pageNum":pageNum,"page_range":page_range,"currentPage":currentPage})
+    pagepermission = BasePagePermission(request.permission_code_list)
+    return render(request, "TeacherList.html", {"teachers": teachers,"pageNum":pageNum,"page_range":page_range,"currentPage":currentPage,"pagepermission":pagepermission})
+
 
 
 from django.forms import Form
@@ -55,14 +56,20 @@ class TeacherForm(Form):
                               widget=widgets.TextInput(attrs={"placeholder": "年龄", "class": "form-control"})
                               )
 
-    teacher_to_cls_id=fields.MultipleChoiceField(choices=models.ClassList.objects.values_list("id","caption"))
+    teacher_to_cls_id=fields.MultipleChoiceField(choices=[])
+    # def __init__(self,*args,**kwargs):
+    #     super().__init__(self,*args,**kwargs)
+    #     self.fields["teacher_to_cls_id"].choices=models.ClassList.objects.all().values_list("id","caption")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["teacher_to_cls_id"].choices  =models.ClassList.objects.all().values_list("id","caption")
 
 
 @auth
 def addTeacher(request):
     if request.method == "GET":
         form = TeacherForm()
-
         return render(request, "addTeacher.html", {"form": form})
     else:
         form = TeacherForm(request.POST)
@@ -81,7 +88,6 @@ def addTeacher(request):
         return render(request, "addTeacher.html", {"form": form})
 
 
-@auth
 def editTeacher(request):
     if request.method=="GET":
         id=request.GET.get("id")
@@ -110,7 +116,7 @@ def editTeacher(request):
          return  redirect("/appTeacher/TeacherList/")
     else:
         render(request,"editTeacher.html",{"form":form})
-@auth
+
 def delTeacher(request):
     id = request.GET.get("id")
     models.UserInfo.objects.filter(id=id).delete()

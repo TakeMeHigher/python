@@ -4,11 +4,17 @@ from app01.views import auth
 from django.forms import Form
 from django.forms import fields
 from django.forms import  widgets
+from  rbac.baseUpdate import BasePagePermission
+# Create your views here.
+
+def ClassList(request):
+    clss=models.ClassList.objects.all()
+    pagepermission = BasePagePermission(request.permission_code_list)
+    return render(request,"ClassList.html",{"clss":clss,"pagepermission":pagepermission})
 # Create your views here.
 @auth
 def ClassList(request):
     clss=models.ClassList.objects.all()
-
     return render(request,"ClassList.html",{"clss":clss})
 
 
@@ -20,9 +26,13 @@ class ClassForm(Form):
     headmaster_id=fields.ChoiceField(choices=models.UserInfo.objects.filter(ut_id=1).all().values_list("id","username"),
                                      widget=widgets.Select)
 
-    teacher_ids=fields.MultipleChoiceField(choices=models.UserInfo.objects.filter(ut_id=2).all().values_list("id","username"))
+    teacher_ids=fields.MultipleChoiceField(choices=[])
 
-@auth
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["teacher_ids"].choices=models.UserInfo.objects.filter(ut_id=2).all().values_list("id","username")
+
+
 def editClass(request):
     if request.method=="GET":
         id=request.GET.get("id")
@@ -51,13 +61,13 @@ def editClass(request):
             teacher.teacher_to_cls.add(cls)
         return redirect("/appClass/ClassList/")
 
-@auth
+
+
 def addClass(request):
     if request.method=="GET":
         form=ClassForm()
         return render(request,"addClass.html",{"form":form})
     form=ClassForm(request.POST)
-
     if form.is_valid():
         teacherids=form.cleaned_data["teacher_ids"]
         del form.cleaned_data["teacher_ids"]
@@ -71,7 +81,8 @@ def addClass(request):
 
         return redirect("/appClass/ClassList/")
     return render(request,"addClass.html",{"form":form})
-@auth
+
+
 def delClass(request):
     id=request.GET.get("id")
     models.ClassList.objects.filter(id=id).delete()

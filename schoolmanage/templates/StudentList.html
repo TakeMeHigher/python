@@ -10,9 +10,14 @@
 
             <div class="row my-table-tool">
                 <div class="col-md-12">
-                    <a href="/appStudent/addStudent/">
-                        <button class="btn btn-success" data-toggle="modal" data-target="#myModal">添加</button>
-                    </a>
+
+                    {% if pagepermission.has_add %}
+                        <a href="/appStudent/addStudent/">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#myModal">添加</button>
+                        </a>
+                    {% endif %}
+
+
                 </div>
             </div>
 
@@ -41,12 +46,19 @@
                             <td>{{ stu.cls.caption }}</td>
                             <td>{{ stu.cls.headmaster.username }}</td>
                             <td>
-                                <a href="/appStudent/editStudent/?id={{ stu.id }}">
-                                    <button class="btn btn-warning">编辑</button>
-                                </a>
-                                <a href="/appStudent/delStudent/?id={{ stu.id }}">
-                                    <button class="btn btn-danger">删除</button>
-                                </a>
+                {% if pagepermission.has_edit %}
+                                    <a href="/appStudent/editStudent/?id={{ stu.id }}">
+                                        <button class="btn btn-warning">编辑</button>
+                                    </a>
+                                {% endif %}
+
+                                {% if pagepermission.has_del %}
+                                    <a href="/appStudent/delStudent/?id={{ stu.id }}">
+                                        <button class="btn btn-danger">删除</button>
+                                    </a>
+                                {% endif %}
+
+
                             </td>
                         </tr>
 
@@ -59,7 +71,9 @@
     </div>
     <nav aria-label="Page navigation" id="paging">
         <ul class="pagination">
-        <li><a href="/appStudent/StudentList/?page=1">首页</a></li>
+
+            <li><a href="/appStudent/StudentList/?page=1">首页</a></li>
+
             {% if students.has_previous %}
                 <li>
                     <a href="/appStudent/StudentList/?page={{ students.previous_page_number }}" aria-label="Previous">
@@ -97,8 +111,9 @@
                 </li>
             {% endif %}
 
-        <li><a href="/appStudent/StudentList/?page={{ pageNum }}">尾页</a></li>
-        <li> <span>共{{ pageNum }}页</span></li>
+
+            <li><a href="/appStudent/StudentList/?page={{ pageNum }}">尾页</a></li>
+            <li><span>共{{ pageNum }}页</span></li>
         </ul>
     </nav>
 {% endblock content %}

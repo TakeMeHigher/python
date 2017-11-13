@@ -3,6 +3,10 @@ from app01 import models
 from django.forms import Form
 from django.forms import fields
 from django.forms import  widgets
+from django.core.validators import RegexValidator
+from rbac.service.init_permission import init_permission
+from rbac import models as rm
+
 # Create your views here.
 
 class LoginForm(Form):
@@ -16,6 +20,9 @@ class LoginForm(Form):
 # def login(request):
 #     if request.method=="GET":
 #         return render(request,"login.html")
+#     else :
+#         name=request.POST.get("user")
+#         pwd=request.POST.get("pwd")
 #     elif request.method=="POST":
 #         name=request.POST.get("user")
 #         pwd=request.POST.get("pwd")
@@ -34,8 +41,14 @@ def login(request):
         return render(request,"login.html",{"form":form})
     form=LoginForm(request.POST)
     if form.is_valid():
-        request.session["userinfo"]={"username":form.cleaned_data["username"],"password":form.cleaned_data["password"]}
+        user=rm.User.objects.filter(**form.cleaned_data).first()
+        if not user:
+            form.add_error("password","用户名或密码")
+            return render(request, "login.html", {"form": form})
+        init_permission(request,user)
         return redirect("/index/")
+    return render(request, "login.html", {"form": form})
+
 def auth(fun):
     def inner(request,*args,**kwargs):
         userinfo=request.session.get("userinfo")
@@ -46,16 +59,16 @@ def auth(fun):
             return redirect("/login/")
     return  inner
 
-@auth
+
+
 def index(request):
     return render(request,"Dashboard.html")
 
-@auth
 def logout(request):
     request.session.flush()
     return redirect("/login/")
 
-@auth
+
 def changpwd(request):
     if request.method=="GET":
         return render(request,"changpwd.html")
@@ -64,8 +77,6 @@ def changpwd(request):
     repeatpwd=request.POST.get("repeatpwd")
     username=request.session["userinfo"]["username"]
     pwd=request.session["userinfo"]["password"]
-
-
     if pwd==oldpwd:
         if not newpwd:
             msg="新密码不能为空"
@@ -74,9 +85,9 @@ def changpwd(request):
             msg="两次输入的密码不一致"
             return render(request, "changpwd.html", {"msg": msg})
         else:
+            rm.User.objects.filter(username=username, password=pwd).update(password=newpwd)
             models.UserInfo.objects.filter(username=username, password=pwd).update(password=newpwd)
             return redirect("/login/")
-
     msg="原密码输入错误"
     return render(request, "changpwd.html", {"msg": msg})
 

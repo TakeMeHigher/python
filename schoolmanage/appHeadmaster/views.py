@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from app01 import models
 from app01.views import auth
 from django.forms import Form,fields,widgets
+from  rbac.baseUpdate import BasePagePermission
+
 # Create your views here.
 
 class HmForm(Form):
@@ -24,16 +26,26 @@ class HmForm(Form):
                             )
 
     sex=fields.ChoiceField(choices=[("m","男"),("f","女")])
+    cls_id=fields.MultipleChoiceField(choices=[])
 
-    cls_id=fields.MultipleChoiceField(choices=models.ClassList.objects.all().values_list("id","caption"))
+    def __init__(self,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["cls_id"].choices=models.ClassList.objects.all().values_list("id","caption")
 
 
-@auth
+
+
+def HeadMasterList(request):
+    hms=models.UserInfo.objects.filter(ut_id=1).all()
+    pagepermission = BasePagePermission(request.permission_code_list)
+    return render(request, "hmList.html",{"hms":hms,"pagepermission":pagepermission})
+
+
 def HeadMasterList(request):
     hms=models.UserInfo.objects.filter(ut_id=1).all()
     return render(request, "hmList.html",{"hms":hms})
 
-@auth
+
 def addHeadMaster(request):
     if request.method=="GET":
         form=HmForm()
@@ -41,8 +53,7 @@ def addHeadMaster(request):
     form=HmForm(request.POST)
     if form.is_valid():
         form.cleaned_data["ut_id"]=1
-        cls_ids=form.cleaned_data["cls_id"]
-        del form.cleaned_data["cls_id"]
+        cls_ids=form.cleaned_data.pop("cls_id")
         headmaster=models.UserInfo.objects.create(**form.cleaned_data)
         for id in cls_ids:
             models.ClassList.objects.filter(id=id).update(headmaster=headmaster)
@@ -50,10 +61,6 @@ def addHeadMaster(request):
     return render(request,"addHm.html",{"form":form})
 
 
-
-
-
-@auth
 def editHeadMaster(request):
     if request.method=="GET":
         id=request.GET.get("id")
@@ -70,9 +77,8 @@ def editHeadMaster(request):
         id=request.GET.get("id")
 
         form.cleaned_data["ut_id"]=1
-        cls_ids=form.cleaned_data["cls_id"]
+        cls_ids=form.cleaned_data.pop("cls_id")
         print(cls_ids)
-        del form.cleaned_data["cls_id"]
         models.UserInfo.objects.filter(id=id).update(**form.cleaned_data)
         headmaster=models.UserInfo.objects.filter(id=id).first()
         for id in cls_ids:
@@ -80,7 +86,6 @@ def editHeadMaster(request):
         return redirect("/appHeadmaster/hmList/")
     return render(request,"addHm.html",{"form":form})
 
-@auth
 def delHeadMaster(request):
     id=request.GET.get("id")
     models.UserInfo.objects.filter(id=id).delete()

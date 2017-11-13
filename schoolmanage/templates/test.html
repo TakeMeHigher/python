@@ -1,0 +1,46 @@
+{#            <div class="menu">#}
+{#                <a href="/appTeacher/TeacherList/">#}
+{#                    <button>老师管理</button>#}
+{#                </a>#}
+{#            </div>#}
+{##}
+{#            <div class="menu">#}
+{#                <a href="/appClass/ClassList/">#}
+{#                    <button>班级管理</button>#}
+{#                </a>#}
+{#            </div>#}
+{##}
+{#            <div class="menu">#}
+{#                <a href="/appStudent/StudentList">#}
+{#                    <button>学生管理</button>#}
+{#                </a>#}
+{#            </div>#}
+{##}
+{##}
+{#            <div class="menu">#}
+{#                <a href="/appHeadmaster/hmList/">#}
+{#                    <button>班主任管理</button>#}
+{#                </a>#}
+{#            </div>#}
+
+
+{% for k,item in menu_list.items %}
+    <div class="item">
+    <div class="item_title">{{ item.menu_title }}</div>
+    {% if item.active %}
+        <div class="item_permissions">
+    {% else %}
+        <div class="item_permissions hide">
+         {% endif %}
+        {% for v in item.children %}
+            {% if v.active %}
+                <a href="{{ v.url }}" class="active">{{ v.title }}</a>
+            {% else %}
+                <a href="{{ v.url }}">{{ v.title }}</a>
+            {% endif %}
+        {% endfor %}
+
+
+</div>
+</div>
+{% endfor %}

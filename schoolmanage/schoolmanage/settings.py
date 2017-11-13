@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app01.apps.App01Config',
+    'rbac',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +49,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rbac.middlewares.rbac.RbacMiddleware',
+
 ]
 
 ROOT_URLCONF = 'schoolmanage.urls'
@@ -123,6 +126,33 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS=(
     os.path.join(BASE_DIR,"static"),
 )
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console':{
+#             'level':'DEBUG',
+#             'class':'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django.db.backends': {
+#             'handlers': ['console'],
+#             'propagate': True,
+#             'level':'DEBUG',
+#         },
+#     }
+# }
+
+
+###############################################################
+VALID_URL = [
+    "^/login/$",
+    "^/admin.*$"
+]
+
+PERMISSSION_URL_LIST="permission_url_list"
+PERMISSIONS_MENU_KEY="permissions_menu_key"
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -140,3 +170,4 @@ LOGGING = {
         },
     }
 }
+

@@ -10,9 +10,14 @@
 
             <div class="row my-table-tool">
                 <div class="col-md-12">
-                    <a href="/appTeacher/addTeacher/">
+
+                    {% if pagepermission.has_add %}
+                      <a href="/appTeacher/addTeacher/">
                         <button class="btn btn-success" data-toggle="modal" data-target="#myModal">添加</button>
                     </a>
+                    {% endif %}
+
+
                 </div>
             </div>
 
@@ -44,12 +49,20 @@
 
                             </td>
                             <td>
-                                <a href="/appTeacher/editTeacher/?id={{ teacher.id }}">
+
+                                {% if pagepermission.has_edit %}
+                                 <a href="/appTeacher/editTeacher/?id={{ teacher.id }}">
                                     <button class="btn btn-warning">编辑</button>
                                 </a>
-                                <a href="/appTeacher/delTeacher/?id={{ teacher.id }}">
+                                {% endif %}
+
+                            {% if pagepermission.has_del %}
+                            <a href="/appTeacher/delTeacher/?id={{ teacher.id }}">
                                     <button class="btn btn-danger">删除</button>
                                 </a>
+                            {% endif %}
+
+
                             </td>
                         </tr>
 

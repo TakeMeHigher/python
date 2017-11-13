@@ -3,6 +3,7 @@ from app01 import  models
 from django.forms import Form,fields,widgets
 from app01.views import auth
 from django.core.paginator import Paginator
+from rbac.baseUpdate import BasePagePermission
 # Create your views here.
 
 class StuForm(Form):
@@ -17,10 +18,12 @@ class StuForm(Form):
     email=fields.EmailField(required=True,error_messages={"required":"邮箱不能为空","invalid":"邮箱格式不正确"},
                             widget=widgets.EmailInput(attrs={"placeholder": "邮箱", "class": "form-control"})
                             )
-    cls_id=fields.ChoiceField(choices=models.ClassList.objects.all().values_list("id","caption"),widget=widgets.Select)
+    cls_id=fields.ChoiceField(choices=[],widget=widgets.Select)
 
+    def __index__(self,*args,**kwargs):
+        super().__init__(self,*args,**kwargs)
+        self.fields["cls_id"].choices=models.ClassList.objects.all().values_list("id","caption")
 
-@auth
 def StudentList(request):
     # s=[]
     # for i in range(50,100):
@@ -41,9 +44,10 @@ def StudentList(request):
     else:
         page_range=paginator.page_range
     students=paginator.page(num)
-    return render(request,"StudentList.html",{"students":students,"pageNum":pageNum,"page_range":page_range,"currentPage":currentPage})
+    pagepermission = BasePagePermission(request.permission_code_list)
+    return render(request,"StudentList.html",{"students":students,"pageNum":pageNum,"page_range":page_range,"currentPage":currentPage,"pagepermission":pagepermission})
 
-@auth
+
 def addStudent(request):
     if request.method=="GET":
         form=StuForm()
@@ -56,7 +60,6 @@ def addStudent(request):
     return render(request,"addStudent.html",{"form":form})
 
 
-@auth
 def editStudent(request):
     if request.method=="GET":
         id=request.GET.get("id")
@@ -74,7 +77,8 @@ def editStudent(request):
         return redirect("/appStudent/StudentList/")
     return render(request,"editStudent.html",{"form":form})
 
-@auth
+
+
 def delStudent(request):
     id=request.GET.get("id")
     print(id)
