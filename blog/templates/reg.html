@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>注册</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/reg.css">
+    <style>
+        .container-fluid{
+            margin-top: 100px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container body-box" style="height: 567px;">
+        <div class="center-block body-content">
+    <!--头部提示-->
+    <div class="hidden-xs title-top col-sm-12">
+        注册新用户
+        <hr class="head-hr">
+    </div>
+    <div class="form-wrap">
+    <form class="form-horizontal col-sm-8 form-padding"  method="post" action="/reg/"  id="registerForm" enctype="multipart/form-data"  novalidate="novalidate">
+        {% csrf_token %}
+        <div class="form-space-top hidden-xs"></div>
+
+        <!--每一行-->
+
+         <div class="form-group">
+            <div class="col-sm-2 control-label">
+                <label class="w4-4" for="LoginName">登录名称</label>
+            </div>
+            <div class="col-sm-10 has-feedback">
+                 {{ form.username }}{{ form.errors.username.0 }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">
+                <label class="w4-4" for="DisplayName">显示名称</label>
+            </div>
+            <div class="col-sm-10 has-feedback">
+                {{ form.nickname }}{{ form.errors.nickname.0 }}
+
+            </div>
+        </div>
+
+         <div class="form-group">
+            <div class="col-sm-2 control-label">
+                <label class="w4-2" for="">头像</label>
+            </div>
+            <div class="col-sm-10 has-feedback">
+                {{ form.avatar }}{{ form.errors.avatar.0 }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2 control-label">
+                <label class="w4-2" for="Email">邮箱</label>
+            </div>
+            <div class="col-sm-10 has-feedback">
+                {{ form.email }}{{ form.errors.email.0 }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">
+                <label class="w4-4" for="PhoneNum">手机号码</label>
+            </div>
+            <div class="col-sm-10 has-feedback">
+                <div class="mobile-control-wrap">
+                    <input class="form-control country-code" type="text"  id="CountryCode" name="CountryCode" value="+86">
+                    {{ form.phone }}{{ form.errors.phone.0 }}
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-2 control-label">
+                <label class="w4-2" for="Password">密码</label>
+            </div>
+            <div class="col-sm-10 has-feedback">
+                 {{ form.password}}{{ form.errors.password.0 }}
+
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2 control-label">
+                <label class="w4-4" for="ConfirmPassword">确认密码</label>
+            </div>
+            <div class="col-sm-10 has-feedback">
+              {{ form.confirmPassword }}{{ form.errors.confirmPassword.0 }}
+
+            </div>
+        </div>
+
+        <!--注册按钮-->
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <span class="col-sm-12 ajax-error"></span>
+                <button id="submitBtn" type="submit" class="btn ladda-button center-block cnblogs-btn-blue" data-style="zoom-in"><span class="ladda-label">注册</span></button>
+            </div>
+        </div>
+        <!--协议提示-->
+        <div class="col-sm-offset-2 register-sign">
+            <span class="asterisk">*</span> “注册” 按钮，即表示您同意并愿意遵守 <a class="look-agreeon" target="_blank" href="#">用户协议</a>。
+        </div>
+        <!--hidden-->
+        <input type="hidden" id="RegisterFrom" name="RegisterFrom" value="https://www.cnblogs.com/">
+        <input type="hidden" id="PublicKey" name="PublicKey" value="MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCp0wHYbg/NOPO3nzMD3dndwS0MccuMeXCHgVlGOoYyFwLdS24Im2e7YyhB0wrUsyYf0/nhzCzBK8ZC9eCWqd0aHbdgOQT6CuFQBMjbyGYvlVYU2ZP7kG9Ft6YV6oc9ambuO7nPZh+bvXH0zDKfi02prknrScAKC0XhadTHT3Al0QIDAQAB">
+    <input name="__RequestVerificationToken" type="hidden" value="CfDJ8BMYgQprmCpNu7uffp6PrYZChThx7Z6zhdb43yLZXOwF0U3fDnA4Ty9QhZu8PcBCxj9zEsOxnHl2stuAQz4VqLStS_aMqz4D5HKGkelNtYUiOwRhSgB3JThKAFNE_PdDMsk5NapDWvaOOMPahW_kpp0"></form>
+    <div class="hidden-xs col-sm-4 side-img-box">
+        <div class="side-line">
+            <div></div>
+        </div>
+        <img src="https://account.cnblogs.com/images/registersideimg.png?v=SuVn_GWSEJByGrNm06GT-sxx_RW9nUtfd625myn_CsE">
+    </div>
+    </div>
+</div>
+
+
+    </div>
+</body>
+
+<script src="/static/jquery-3.2.1.min.js"></script>
+<script src="/static/jquery.cookie.js"></script>
+{#<script>#}
+{#    $(function () {#}
+{#      $('#submitBtn').click(function () {#}
+{#         $.ajax({#}
+{#             url:'/reg/',#}
+{#             type:'POST',#}
+{#             headers: {"X-CSRFToken": $.cookie('csrftoken')},#}
+{#             data:$('#registerForm').serialize(),#}
+{#             success:function (data) {#}
+{#                 if(data=='ok'){#}
+{#                     window.location.href='/login/';#}
+{#                 }#}
+{#             }#}
+{#         })#}
+{##}
+{#      })#}
+{#    })#}
+{#</script>#}
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <style>
+        #firstdiv {
+            margin-top: 100px;
+        }
+
+        #sub_btn {
+            width: 360px
+        }
+
+        .login_text {
+            text-align: center;
+            color: #31b0d5;
+        }
+
+        #valid_img {
+            height: 34px;
+            width: 165px;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row " id="firstdiv">
+        <div class="col-md-4 col-md-offset-4">
+            <h3 class="login_text">用户登录</h3>
+            <form>
+                {% csrf_token %}
+                <div class="form-group  out_div">
+                    <label class="control-label" for="username">用户名</label>
+                    <input type="text" class="form-control input_class" id="username" name="user"
+                           aria-describedby="helpBlock2">
+                    <span id="helpBlock1" class="help-block hide"></span>
+                </div>
+                <div class="form-group  out_div">
+                    <label class="control-label" for="pwd">密码</label>
+                    <input type="text" class="form-control input_class" id="pwd" name="pwd">
+                    <span id="helpBlock2" class="help-block hide"></span>
+                </div>
+
+                <div class="form-group  out_div">
+                    <div class="row ">
+                        <div class="col-md-6 valid">
+                            <label class="control-label" for="valid_Code">验证码</label>
+                            <input type="text" id="valid_Code" class="form-control " name="valid_Code">
+                        </div>
+
+                        <div class="col-md-6 validate">
+                            <img src="/get_valid_Code_img/" id="valid_img" alt="">
+                        </div>
+                    </div>
+
+
+                </div>
+                <button type="button" id="sub_btn" class="btn btn-primary">登录</button>
+                <span id="error" style="color: red"></span>
+            </form>
+
+            <h3>还没有账号去<a href="/reg/" style="color: #31b0d5">注册</a>？</h3>
+            <p>{{ msg }}</p>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/static/jquery-3.2.1.min.js"></script>
+<script>
+    $(function () {
+        $("#sub_btn").click(function () {
+            function foo() {
+                $('#error').html('')
+            }
+
+            $.ajax({
+                url: '/login/',
+                type: 'POST',
+                data: {
+                    name: $("#username").val(),
+                    pwd: $('#pwd').val(),
+                    valid_Code: $("#valid_Code").val(),
+                    csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+                },
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (!data['flag']) {
+                        $("#error").html(data["msg"]);
+                        setTimeout(foo, 3000)
+                    } else {
+                        window.location.href = '/index/'
+                    }
+                }
+            })
+        });
+
+        $('#valid_img').click(function () {
+            $.ajax({
+                url:'/get_valid_Code_img/',
+                type:'get',
+                success:function (data) {
+                    $('#valid_img').attr('src','/get_valid_Code_img/')
+                }
+            })
+        });
+    })
+</script>
+</html>
