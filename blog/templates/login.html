@@ -4,31 +4,19 @@
     <meta charset="UTF-8">
     <title>登录</title>
     <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-    <style>
-        #firstdiv {
-            margin-top: 100px;
-        }
-
-        #sub_btn {
-            width: 360px
-        }
-
-        .login_text {
-            text-align: center;
-            color: #31b0d5;
-        }
-
-        #valid_img {
-            height: 34px;
-            width: 165px;
-            margin-top: 25px;
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/login.css">
 </head>
 <body>
+ <div id="head">
+      <div>欢迎来到伯乐园</div>
+    </div>
 <div class="container">
+
     <div class="row " id="firstdiv">
-        <div class="col-md-4 col-md-offset-4">
+        <div class="col-md-8">
+            <img src="/static/img/km.jpg" alt="" id="km">
+        </div>
+        <div class="col-md-4 pull-right" id="logindiv">
             <h3 class="login_text">用户登录</h3>
             <form>
                 {% csrf_token %}
@@ -62,7 +50,11 @@
                 <span id="error" style="color: red"></span>
             </form>
 
-            <h3>还没有账号去<a href="/reg/" style="color: #31b0d5">注册</a>？</h3>
+            <p>还没有账号去<a href="/reg/" style="color: #31b0d5">注册</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                忘记密码?<a href="/researchPassword/"  style="color: #31b0d5">找回密码</a></p>
+
             <p>{{ msg }}</p>
         </div>
     </div>
@@ -91,20 +83,14 @@
                         $("#error").html(data["msg"]);
                         setTimeout(foo, 3000)
                     } else {
-                        window.location.href = '/index/'
+                        window.location.href = '/'
                     }
                 }
             })
         });
 
         $('#valid_img').click(function () {
-            $.ajax({
-                url:'/get_valid_Code_img/',
-                type:'get',
-                success:function (data) {
-                    $('#valid_img').attr('src','/get_valid_Code_img/')
-                }
-            })
+          $(this)[0].src+='?'
         });
     })
 </script>

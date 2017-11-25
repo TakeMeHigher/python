@@ -1,0 +1,234 @@
+#article_title {
+    margin-top: 20px;
+    border-bottom: 1px solid gainsboro;
+}
+
+#article_title a {
+    color: #399ab2;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.clear {
+    clear: both;
+}
+
+#article_opration {
+    margin-top: 50px;
+}
+
+#green_channel {
+    padding: 10px 0;
+    margin-bottom: 10px;
+    margin-top: 30px;
+    border: silver 1px dashed;
+    font-size: 12px;
+    width: 350px;
+    text-align: center;
+}
+
+#green_channel_digg {
+    background-color: #2daebf;
+
+}
+
+#green_channel_follow {
+    background-color: #e33100;
+}
+
+#green_channel_favorite {
+    background-color: #ffb515;
+}
+
+#green_channel_digg a {
+    background-color: #2daebf;
+
+}
+
+#green_channel #green_channel_wechat img {
+    width: 20px;
+    height: 20px;
+    border: medium none;
+    box-shadow: none;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+#green_channel_weibo, #green_channel_wechat {
+    background: none;
+    padding: 0 2px 2px 3px;
+    text-shadow: none;
+    width: 27px;
+    height: 23px;
+}
+
+#green_channel a {
+    display: inline-block;
+    padding: 3px 2px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 10px;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+    text-shadow: 0 -1px 1px rgba(0, 0, 0, .25);
+    vertical-align: middle;
+}
+
+#avatar_avatar {
+    display: inline-block;
+    float: left;
+
+}
+
+#avatar_avatar img {
+    width: 60px;
+    height: 60px;
+}
+
+#arthor_deatil {
+    display: inline-block;
+    float: left;
+    margin-left: 5px;
+}
+
+/**点赞列表*/
+#div_digg {
+    float: right;
+    margin-bottom: 10px;
+    margin-right: 30px;
+    font-size: 12px;
+    width: 128px;
+    text-align: center;
+    margin-top: 10px;
+    width: 128px;
+    height: 64px;
+}
+
+/*点赞**/
+.diggit {
+    float: left;
+    width: 46px;
+    height: 52px;
+    background: url(/static/img/upup.gif) no-repeat;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 2px;
+    padding-top: 5px;
+}
+
+/*反对**/
+.buryit {
+    float: right;
+    margin-left: 20px;
+    width: 46px;
+    height: 52px;
+    background: url(/static/img/downdown.gif) no-repeat;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 2px;
+    padding-top: 5px;
+}
+
+/**上一篇*/
+#post_next_prev {
+    line-height: 1.8;
+    font-size: 12px;
+    display: block;
+    padding-top: 40px;
+    clear: left;
+}
+
+#post_next_prev a.p_n_p_prefix:link {
+    text-decoration: none;
+}
+
+.postCon a, .postBody a, .feedbackCon a {
+    border-bottom: 1px dotted #333;
+    color: #000;
+}
+
+#post_next_prev {
+    line-height: 1.8;
+    font-size: 12px;
+}
+
+/***评论列表**/
+.feedbackManage {
+    float: right;
+}
+#commentList{
+        border-bottom: 1px solid #ddd;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 100px 0 10px;
+}
+
+#comment_list a{
+    text-decoration: none;
+}
+
+#comment_list a:hover{
+   color: greenyellow;
+}
+
+.commentTile .layer{
+    color: #399ab2;
+    text-decoration: none;
+}
+
+.comment_body_content{
+    word-wrap: break-word;
+    overflow: hidden;
+        color: #888;
+    font-size: 12px;
+    line-height: 135%;
+    padding: 7px;
+
+}
+
+.comment_vote {
+    text-align: right;
+}
+
+.commentItem{
+    padding: 8px;
+    border-bottom: 1px dotted #ccc;
+}
+
+/*评论*/
+#comment{
+    margin-top: 50px;
+}
+
+#commentform_title {
+    background-image: url(/static/img/icon_addcomment.gif);
+    background-repeat: no-repeat;
+    padding: 0 0 0 25px;
+    margin-bottom: 10px;
+
+}
+
+#comment_nick p{
+
+    display: block;
+    -webkit-margin-before: 1em;
+    -webkit-margin-after: 1em;
+    -webkit-margin-start: 0px;
+    -webkit-margin-end: 0px;
+
+}
+
+#tbCommentAuthor{
+    background-position: 3px -3px;
+        background-image: url(/static/img/icon_form.gif);
+    background-repeat: no-repeat;
+    border: 1px solid #ccc;
+    padding: 4px 4px 4px 30px;
+    width: 300px;
+    font-size: 13px;
+}

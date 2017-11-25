@@ -1,0 +1,137 @@
+{% extends "personalBase.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/article.css">
+{% endblock css %}
+
+
+
+{% block article %}
+    <div class="article">
+        <div id="body">
+            <div id="article_title">
+                <h1><a href="">{{ articleobj.title }}</a></h1>
+            </div>
+            <div id="article_id" class="hide">
+                {{ articleobj.id }}
+            </div>
+            <div id="article_content">
+                {{ articleobj.articledetail.content|safe }}
+            </div>
+
+            <div id="article_opration">
+                <div id="BlogPostCategory">
+                    分类:<a
+                        href="/blog/{{ articleobj.user.username }}/category/{{ articleobj.category.title }}">{{ articleobj.category.title }}</a>
+                </div>
+                <div id="green_channel">
+                    <a id="green_channel_digg">好文要顶</a>
+                    <a id="green_channel_follow">关注我</a>
+                    <a id="green_channel_favorite">收藏该文</a>
+                    <a id="green_channel_weibo">
+                        <img src="/static/img/icon_weibo_24.png" alt="">
+                    </a>
+                    <a id="green_channel_wechat">
+                        <img src="/static/img/wechat.png" alt="">
+                    </a>
+                </div>
+                <div id="author_profile">
+                    <a href="/blog/{{ articleobj.user.username }}/" id="avatar_avatar"><img
+                            src="/media/{{ articleobj.user.avatar }}" alt=""></a>
+                    <div id="arthor_deatil">
+                        <a href="/blog/{{ articleobj.user.username }}/">{{ articleobj.user.nickname }}</a> <br>
+                        <a href="">关注:5</a> <br>
+                        <a href="">粉丝:300</a> <br>
+                    </div>
+                    <div id="div_digg">
+                        <div class="diggit">
+                            {% csrf_token %}
+                            <span class="diggnum" id="digg_count">{{ articleobj.up_count }}</span>
+                        </div>
+
+                        <div class="buryit">
+                            <span class="burynum" id="bury_count">{{ articleobj.down_count }}</span>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="diggword" id="digg_tips">
+                        </div>
+                        <span class="pull-right" style="margin-right: 20px" id="uperror"></span>
+                    </div>
+
+                    <div id="post_next_prev"><a href="" class="p_n_p_prefix">« </a>
+                        上一篇：<a href="" title="发布于2017-11-14 23:25">Django-Ajax</a><br></div>
+
+                    <div class="postDesc pull-right">
+                        posted @ <span id="post-date">{{ articleobj.create_time|date:"Y-m-d" }}</span>
+                        <a href="/blog/{{ articleobj.user.username }}">{{ articleobj.user.nickname }}</a>
+                        阅读 <span id="read_count">({{ articleobj.read_count }})</span> 评论({{ articleobj.comment_count }})
+                        <a href="#">编辑</a>
+                        <a href="#">收藏</a></div>
+
+
+                </div>
+
+            </div>
+
+            <div id="comment_list">
+                <div id="commentList">评论列表</div>
+                {% for con in articleobj.comment_set.all %}
+                    <div class="commentItem">
+                        <div class="feedbackManage">
+                            &nbsp;&nbsp;
+                            <span class="comment_actions">
+                          <a href="#">回复</a>
+                          <a href="#">引用</a>
+                      </span>
+                        </div>
+                        <div class="commentTile">
+                            <a href="#3762185" class="layer">{{ forloop.counter }}楼</a>
+                            <span>{{ con.create_time|date:"Y-m-d H:i:s" }}</span>
+                            <a href="" id="user_nickname">{{ con.user.nickname }}</a>
+                        </div>
+                        <div class="commentContent">
+                            <div class="comment_body_content">
+                                {{ con.content }}
+                            </div>
+
+                            <div class="comment_vote">
+                                <a href="#" class="comment_digg">支持({{ con.up_count }})</a>
+                                <a href="#" class="comment_bury">反对(0)</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div id="comment">
+                <div id="commentform_title">发表评论</div>
+                <div id="comment_nick">
+                    <p>
+                        昵称：<input type="text" id="tbCommentAuthor" class="author" disabled="disabled" size="50"
+                                  value="{{ request.user.nickname }}">
+                    </p>
+                </div>
+                <div>
+                    评论内容
+                </div>
+
+                <div id="commentBody">
+                    <form>
+                        {% csrf_token %}
+                        <textarea name="" id="comment_content" cols="70" rows="15"></textarea> <br>
+                        <input type="button" value="提交评论" id="subBtn">
+                    </form>
+                </div>
+                <span id="commenterror"></span>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/static/js/diggst.js"></script>
+    <script>
+
+    </script>
+
+
+{% endblock article %}

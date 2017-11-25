@@ -4,10 +4,212 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Title</title>
+    <title>首页</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <script src="/static/jquery-3.2.1.min.js"></script>
 </head>
 <body>
-<h1>{{ request.user.username }}欢迎你!</h1>
-<p><a href="/logout/">注销</a></p>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid ">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand " href="#" id="bkTitle">伯乐园</a>
+            <a class="navbar-brand category_text" href="#">随笔</a>
+            <a class="navbar-brand category_text" href="#">圈子</a>
+            <a class="navbar-brand category_text" href="#">博文</a>
+            <a class="navbar-brand category_text" href="#">小组</a>
+
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" style="padding-right: 140px">
+                {% if request.user.is_authenticated %}
+                    <li id="top-login"><span class="glyphicon glyphicon-user"
+                                             style="color: white"></span>{{ request.user.username }}</li>
+                    <li><a href="/logout/">注销</a></li>
+                    <li><a href="/changePassword/">修改密码</a></li>
+                {% else %}
+                    <li><a href="/login/">登录</a></li>
+                    <li><a href="/reg/">注册</a></li>
+                {% endif %}
+
+                <li><a href="#">帮助</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">
+
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading" style="font-size: 18px">网站分类</div>
+
+
+                {% for siteCategory in SiteCategory %}
+                    <div class="list-group">
+                        <button type="button" class="list-group-item head">{{ siteCategory.name }}</button>
+                        <ul class="nav nav-sidebar">
+                            {% for foo in siteCategory.sitearticlecategory_set.all %}
+                                <li><a href="/cate/{{ foo.name }}">{{ foo.name }}</a></li>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+        <div class="col-md-8">
+
+            {% for article in articles %}
+                <div class="article_id hide">{{ article.id }}</div>
+                <div class="article_row" style="margin-top: 20px">
+                    <div class="article_title">
+                        <a href="/blog/{{ article.user.username }}/p/{{ article.id }}" style="text-decoration: none"><p
+                                style="color: #46b8da;font-size: 15px">{{ article.title }}</p></a>
+                    </div>
+
+                    <div class="article_content">
+
+                        <div class="col-md-2 article_img">
+                            <a href="/blog/{{ article.user.username }}"> <img src="/media/{{ article.user.avatar }}"
+                                                                              alt=""
+                                                                              style="width:70px;height: 70px"></a>
+                        </div>
+                        <div class="col-md-10 article_text">
+                            <p>
+                                {{ article.desc }}...
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        {% csrf_token %}
+                        <a href="/blog/{{ article.user.username }}">
+                            <span style="color: #2b669a;font-size: 15px">{{ article.user.username }}</span>
+                        </a>发表于
+                        <span
+                                style="color:  #2b669a;font-size: 15px">{{ article.create_time|date:"Y-m-d H:i:s" }}</span>
+                        &nbsp; &nbsp;
+                        <a href="" style="color:#2b669a;text-decoration: none">
+                            <span class="glyphicon glyphicon-comment"></span>
+                            <span>评论({{ article.comment_count }})</span>
+                        </a>&nbsp;
+                        {#                        &nbsp; &nbsp; <a href=""><span#}
+                        {#                                class="glyphicon glyphicon-thumbs-up">Up({{ article.up_count }})</span></a>#}
+                        <a class="diggit" style="text-decoration: none"><img src="/static/img/dz.png" alt=""
+                                                                             style="height:26px;padding-bottom: 4px;">点赞({{ article.up_count }})
+
+                        </a>
+                        &nbsp;&nbsp;
+                        <a href="/blog/{{ article.user.username }}/p/{{ article.id }}"
+                           style="text-decoration: none"><img src="/static/img/read.png"
+                                                              style="height: 14px;width: 20px"
+                                                              alt="">阅读数({{ article.read_count }})</a>
+
+                    </div>
+                    <span id="uperror"></span>
+                </div>
+            {% endfor %}
+
+
+        </div>
+
+        <div class="col-md-2">
+
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Panel heading</div>
+
+                <!-- List group -->
+                <ul class="list-group">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Morbi leo risus</li>
+                    <li class="list-group-item">Porta ac consectetur ac</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+
+
+            </div>
+
+
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">Panel heading</div>
+
+                <!-- List group -->
+                <ul class="list-group">
+                    <li class="list-group-item">Cras justo odio</li>
+                    <li class="list-group-item">Dapibus ac facilisis in</li>
+                    <li class="list-group-item">Morbi leo risus</li>
+                    <li class="list-group-item">Porta ac consectetur ac</li>
+                    <li class="list-group-item">Vestibulum at eros</li>
+                </ul>
+
+
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+
+<nav aria-label="Page navigation" id="paging">
+    <ul class="pagination">
+
+        <li><a href="/?page=1">首页</a></li>
+
+        {% if articles.has_previous %}
+            <li>
+                <a href="/?page={{ articles.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {% else %}
+            <li class="disabled">
+                <a href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        {% endif %}
+        {% for page in page_range %}
+            {% if currentPage == page %}
+                <li class="active"><a href="/?page={{ page }}">{{ page }}</a></li>
+            {% else %}
+                <li><a href="/?page={{ page }}">{{ page }}</a></li>
+            {% endif %}
+
+
+        {% endfor %}
+        {% if articles.has_next %}
+            <li>
+                <a href="/?page={{ students.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        {% else %}
+
+            <li class="disabled">
+                <a href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        {% endif %}
+
+
+        <li><a href="/?page={{ pageNum }}">尾页</a></li>
+        <li><span>共{{ pageNum }}页</span></li>
+    </ul>
+</nav>
 </body>
+<script src="/static/js/index.js"></script>
+
 </html>

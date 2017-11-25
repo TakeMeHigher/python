@@ -49,6 +49,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'app01.middlewares.middleware.Middleware',
 ]
 
 ROOT_URLCONF = 'blog.urls'
@@ -125,4 +126,41 @@ STATICFILES_DIRS=(
     os.path.join(BASE_DIR,"app01","static"),
 )
 
+#modles 当前时间
 AUTH_USER_MODEL = "app01.UserInfo"
+
+#media 配置
+MEDIA_ROOT=os.path.join(BASE_DIR,"app01","media","uploads")
+MEDIA_URL="/media/"
+
+
+#白名单
+VALID_URL = [
+    "^/login/$",
+    "^/admin.*",
+    "^/$",
+    "^/get_valid_Code_img/$",
+    "^/media/.*",
+    "^/cate/.*",
+    "^/reg/$",
+    "^/blog/.*"
+
+]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+    }
+}

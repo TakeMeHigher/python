@@ -38,7 +38,7 @@ class RegForm(forms.Form):
                                 widget=forms.widgets.TextInput(
                                     attrs={"class": "form-control", 'placeholder': '请输入确认密码', 'id': "confirmPassword"})
                                 )
-    avatar=forms.FileField(required=True,error_messages={'required':'头像不能为空'})
+    # avatar=forms.FileField(required=True,error_messages={'required':'头像不能为空'})
 
     def clean_username(self):
         user=models.Userinfo.objects.filter(username=self.cleaned_data.get("username")).first()

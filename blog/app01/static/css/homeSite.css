@@ -1,0 +1,45 @@
+
+
+/**主题部分*/
+
+/**文章列表*/
+
+#main {
+    margin-top: 70px;
+
+}
+
+#main .day {
+    margin-top: 20px;
+}
+
+#mainContent .dayTitle a {
+    color: #399ab2;
+    text-decoration: none;
+}
+
+#mainContent .articleTitle {
+    margin: 10px 0 10px;
+}
+
+#mainContent .articleTitle a {
+
+    color: #9cba39;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#mainContent .articleDesc {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.5;
+}
+
+#mainContent .postDesc {
+    border: none;
+    color: #999;
+    text-align: right;
+    padding-bottom: 20px;
+}
+
+

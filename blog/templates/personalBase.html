@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/personalBase.css">
+    {% block css %}
+    {% endblock css %}
+    <script src="/static/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+<nav class="navbar  navbar-fixed-top">
+    <div class="container-fluid ">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class=" navbar-header" id="navbar-user-nickname">
+            <a href="/blog/{{ user.username }}"  style="color: white;text-decoration: none"> {{ user.nickname }}</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" id="navList">
+                <li><a href="#">伯乐园</a></li>
+                <li><a href="/">首页</a></li>
+                <li><a href="#">新随笔</a></li>
+                <li><a href="#">联系</a></li>
+                <li><a href="#">订阅</a></li>
+                <li><a href="#">管理</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid" id="main">
+    <div class="row">
+        <div class="col-md-3" id="sideBar">
+            <div class="panel panel-default">
+             <div class="panel panel-default">
+                    <div class="panel-heading " id="notice">公告</div>
+                    <div class="panel-body">
+                        <div id="author_news">
+                            <a href=""> <img src="/media/{{ user.avatar }}" alt="" id="author_avatar"></a> <br><br>
+                            昵称 : <a href="">{{ user.nickname }}</a> <br>
+                            圆龄 : <a href="">3年</a> <br>
+                            粉丝 : <a href="">3000</a> <br>
+                            关注 : <a href="">5</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">常用链接</div>
+                    <div class="panel-body" id="common_link">
+                        <ul>
+                            <li><a href="">我的随笔</a></li>
+                            <li><a href="">我的评论</a></li>
+                            <li><a href="">我的参与</a></li>
+                            <li><a href="">我的标签</a></li>
+                            <li><a href="">最新评论</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">文章分类</div>
+                    <div class="panel-body" id="article_category">
+                        <ul>
+                            {% for category in user.blog.category_set.all %}
+                                <li><a href="/blog/{{ user.username }}/category/{{ category.title }}">{{ category.title }}({{ category.article_set.count }})</a></li>
+                            {% endfor %}
+
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">标签分类</div>
+                    <div class="panel-body" id="article_category">
+                        <ul>
+                          {% for tag in user.blog.tag_set.all %}
+                             <li><a href="/blog/{{ user.username }}/tag/{{ tag.title }}">{{ tag.title }}({{ tag.article_set.all.count}})</a></li>
+                          {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">随笔档案</div>
+                    <div class="panel-body" id="article_category">
+                        <ul>
+                            {% for date in date_list%}
+                                     <li><a href="/blog/{{ user.username }}/date/{{date.0 }}">{{date.0}}({{ date.1 }})</a></li>
+
+                            {% endfor %}
+
+
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-9" id="mainContent">
+
+
+            {% block article %}
+
+            {% endblock article %}
+
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+#bkTitle {
+    margin-left: 160px;
+    margin-right: 160px;
+}
+
+.category_text {
+    font-size: 15px;
+    padding-left: 30px;
+}
+
+#top-login {
+    color: white;
+    margin-right: 15px;
+    margin-top: 15px;
+}
+
+.container {
+    margin-top: 70px;
+}
+
+.head{
+    text-align: center;
+     padding-left: 50px;
+}
+
+.list-group .nav-sidebar{
+    display: none;
+}
+
+.article_row{
+    margin-top: 30px;
+}
+
+.list-group{
+    margin-top: 10px;
+}
+
+/**
+导航条
+*/
+.navbar-fixed-top{
+    height: 50px;
+}
+
+ .panel-default >.panel-heading{
+     font-size: 18px;
+ }
+
+
+ a{
+     text-decoration: none;
+ }
+
+ /*分页**/
+
+#paging{
+    margin-left: 450px;
+}
