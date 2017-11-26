@@ -4,6 +4,7 @@ from app01 import models
 from app01.forms import RegForm
 from django.db.models import  F
 from django.core.paginator import Paginator
+from django.db import transaction
 import json
 import random
 
@@ -97,42 +98,48 @@ def index(request,*args,**kwargs):
 
 #注销
 def logout(request):
-    request.session.flush()
-    return redirect('/login/')
+    if request.user.is_authenticated():
+        request.session.flush()
+        return redirect('/login/')
+    else:
+        return redirect("/login/")
 
 
 #修改密码
 def changePassword(request):
-    user=request.user
-    if request.method=="POST":
-        newpwd=request.POST.get("newpwd")
-        oldpwd=request.POST.get("oldpwd")
-        repeatpwd=request.POST.get("repeatpwd")
-        cp_dic={"flag":False,"errors":None}
-        if user.check_password(oldpwd):
-            if newpwd:
-                if repeatpwd:
-                    if newpwd==repeatpwd:
-                        cp_dic['flag']=True
-                        user.set_password(newpwd)
-                        user.save()
-                        print(user.password)
+    if request.user.is_authenticated():
+        user=request.user
+        if request.method=="POST":
+            newpwd=request.POST.get("newpwd")
+            oldpwd=request.POST.get("oldpwd")
+            repeatpwd=request.POST.get("repeatpwd")
+            cp_dic={"flag":False,"errors":None}
+            if user.check_password(oldpwd):
+                if newpwd:
+                    if repeatpwd:
+                        if newpwd==repeatpwd:
+                            cp_dic['flag']=True
+                            user.set_password(newpwd)
+                            user.save()
+                            print(user.password)
+                        else:
+                            cp_dic["errors"] = "两次输入密码不一致"
+
                     else:
-                        cp_dic["errors"] = "两次输入密码不一致"
-
+                        cp_dic["errors"]="确认密码不能为空"
                 else:
-                    cp_dic["errors"]="确认密码不能为空"
+                    cp_dic["errors"]="新密码不能为空"
+
             else:
-                cp_dic["errors"]="新密码不能为空"
+                cp_dic["errors"]="原密码输入错误"
 
-        else:
-            cp_dic["errors"]="原密码输入错误"
-
-        return HttpResponse(json.dumps(cp_dic))
+            return HttpResponse(json.dumps(cp_dic))
 
 
 
-    return render(request, "changePassword.html")
+        return render(request, "changePassword.html")
+    else:
+        return redirect("/login/")
 
 
 
@@ -284,58 +291,82 @@ def articleDetail(request,username,article_id):
 
 #点赞
 def articleDiggit(request):
-    article_id=request.POST.get("article_id")
-    user_id=request.user.id
-    diggit_response={"flag":False,"errors":None}
-    if models.ArticleUp.objects.filter(user_id=user_id,article_id=article_id):
-        diggit_response["errors"]="不能重复点赞"
-    else:
-        try:
-            diggit_response['flag']=True
-            models.ArticleUp.objects.create(user_id=user_id,article_id=article_id)
+    if request.user.is_authenticated():
+        article_id=request.POST.get("article_id")
+        user_id=request.user.id
+        diggit_response={"flag":False,"errors":None}
+        if models.ArticleUp.objects.filter(user_id=user_id,article_id=article_id):
+            diggit_response["errors"]="不能重复点赞"
+        else:
+            try:
+                diggit_response['flag']=True
+                models.ArticleUp.objects.create(user_id=user_id,article_id=article_id)
 
-            models.Article.objects.filter(id=article_id).update(up_count=F("up_count")+1)
-        except:
-            diggit_response["errors"]="未知错误"
-    return  HttpResponse(json.dumps(diggit_response))
+                models.Article.objects.filter(id=article_id).update(up_count=F("up_count")+1)
+            except:
+                diggit_response["errors"]="未知错误"
+        return  HttpResponse(json.dumps(diggit_response))
+    else:
+        return redirect("/login/")
 
 #文章反对
 def articleBuryit(request):
-    article_id = request.POST.get("article_id")
-    user_id = request.user.id
-    buryit_response={"flag":False,"errors":None}
-    if models.ArticleDown.objects.filter(user_id=user_id,article_id=article_id):
-        buryit_response["errors"]="不能重复反对"
+    if request.user.is_authenticated():
+        article_id = request.POST.get("article_id")
+        user_id = request.user.id
+        buryit_response={"flag":False,"errors":None}
+        if models.ArticleDown.objects.filter(user_id=user_id,article_id=article_id):
+            buryit_response["errors"]="不能重复反对"
+        else:
+            try:
+                with transaction.atomic():
+                    models.ArticleDown.objects.create(article_id=article_id,user_id=user_id)
+                    models.Article.objects.update(down_count=F("down_count")+1)
+                buryit_response["flag"]=True
+            except:
+                buryit_response["errors"]="未知错误"
+        return HttpResponse(json.dumps(buryit_response))
     else:
-        try:
-            models.ArticleDown.objects.create(article_id=article_id,user_id=user_id)
-            models.Article.objects.update(down_count=F("down_count")+1)
-            buryit_response["flag"]=True
-        except:
-            buryit_response["errors"]="未知错误"
-    return HttpResponse(json.dumps(buryit_response))
+        return HttpResponse('')
 
 
 
 #文章评论
 def articleComment(request):
-    if request.user.is_authenticated():
-        article_id = request.POST.get("article_id")
-        user_id = request.user.id
-        content=request.POST.get("content")
-        comment_response={"flag":True,"errors":None,"comment_time":None}
-        try:
+    article_id = request.POST.get("article_id")
+    user_id = request.user.id
+    content=request.POST.get("content")
+    parent_comment_id=request.POST.get("parent_comment_id")
+    comment_response={"flag":True,"errors":None,"comment_time":None}
+    print(parent_comment_id,'-----------------')
+    if not parent_comment_id:
+        with transaction.atomic():
             comment=models.Comment.objects.create(article_id=article_id,user_id=user_id,content=content)
             models.Article.objects.filter(id=article_id).update(comment_count=F("comment_count")+1)
-
-            time=models.Comment.objects.filter(id=comment.id).extra(select={"comment_time":"strftime('%%Y-%%m-%%d %%H:%%M:%%S',create_time)"}).values_list("comment_time")
-            comment_response["comment_time"]=time[0][0]
-        except:
-            comment_response["flag"]=False
-            comment_response["errors"]="未知错误"
-        return HttpResponse(json.dumps(comment_response))
     else:
-        return redirect("/login/")
+        comment=models.Comment.objects.create(article_id=article_id,user_id=user_id,content=content,parent_comment_id=parent_comment_id)
+
+    time=models.Comment.objects.filter(id=comment.id).extra(select={"comment_time":"strftime('%%Y-%%m-%%d %%H:%%M:%%S',create_time)"}).values_list("comment_time")
+    comment_response["comment_time"]=time[0][0]
+
+    return HttpResponse(json.dumps(comment_response))
+
+
+# #评论回复
+# def commentReply(request):
+#     article_id=request.POST.get("article_id")
+#     parent_comment_id=request.POST.get("parent_comment_id")
+#     content=request.POST.get("content")
+#     user_id=request.user.id
+#     print(article_id,parent_comment_id,content,"--------",user_id)
+#     return HttpResponse()
+
+
+
+def delComment(request):
+    comment_id=request.POST.get("comment_id")
+    models.Comment.objects.filter(id=comment_id).delete()
+    return HttpResponse("ok")
 
 
 

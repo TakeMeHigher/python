@@ -22,6 +22,8 @@ urlpatterns = [
     url(r'^diggit/$', views.articleDiggit),
     url(r'^buryit/$', views.articleBuryit),
     url(r'^comment/$', views.articleComment),
+    url(r'^delComment/$', views.delComment),
+
     url(r'^(?P<username>.*)/p/(?P<article_id>[0-9]+)/$', views.articleDetail),
 
     url(r'^(?P<username>.*)/(?P<condition>tag|category|date)/(?P<para>.*)/$', views.homeSite),
