@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import fields,widgets
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 import re
@@ -72,5 +73,26 @@ class RegForm(forms.Form):
             raise ValidationError('确认密码输入错误')
 
 
+class ArticleForm(forms.Form):
+    title=fields.CharField(max_length=30,error_messages={"required":"标题不能为空"},
+                          widget=widgets.TextInput(attrs={"id":"tilte","style":"width:800px"})
+                          )
+
+    content=fields.CharField(error_messages={"required":"内容不能为空"},
+                             widget=widgets.Textarea(attrs={"id":"article_content"})
+                             )
 
 
+    category_id=fields.ChoiceField(choices=[],widget=widgets.RadioSelect(attrs={"class":"list-unstyled list-inline"}))
+
+    tag_ids=fields.MultipleChoiceField(choices=[],widget=widgets.CheckboxSelectMultiple(attrs={"class":"list-unstyled list-inline"}))
+
+    siteArticleCategory_id=fields.ChoiceField(choices=[],widget=widgets.RadioSelect(attrs={"class":"list-unstyled list-inline"}))
+
+
+
+    def __init__(self,user_id,*args,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields["category_id"].choices=models.Category.objects.filter(blog__user_id=user_id).values_list("id","title")
+        self.fields["tag_ids"].choices=models.Tag.objects.filter(blog__user_id=user_id).values_list("id","title")
+        self.fields["siteArticleCategory_id"].choices=models.SiteArticleCategory.objects.all().values_list("id","name")

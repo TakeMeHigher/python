@@ -20,6 +20,11 @@
     color: white;
 }
 
+#navList li a:hover{
+    background: none;
+    font-size: 18px;
+}
+
 #main {
     margin-top: 70px;
 

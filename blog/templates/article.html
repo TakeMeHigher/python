@@ -12,9 +12,7 @@
             <div id="article_title">
                 <h1><a href="">{{ articleobj.title }}</a></h1>
             </div>
-            <div id="article_id" class="hide">
-                {{ articleobj.id }}
-            </div>
+            <div id="article_id" class="hide">{{ articleobj.id }}</div>
             <div id="article_content">
                 {{ articleobj.articledetail.content|safe }}
             </div>
@@ -75,16 +73,19 @@
 
             <div id="comment_list">
                 <div id="commentList">评论列表</div>
+                <div id="commentTree">
+
+                </div>
                 {% for con in articleobj.comment_set.all %}
                     <div class="commentItem">
                         <div class="feedbackManage">
 
                             &nbsp;&nbsp;<span class="comment_actions">
                             {% if con.user.id == request.user.id %}
-                                <a href="#commentBody" comment_id="{{ con.id }}"  >修改</a>
-                                <a  comment_id="{{ con.id }}" class="delComment">删除</a>
+                                <a href="#commentBody" comment_id="{{ con.id }}">修改</a>
+                                <a comment_id="{{ con.id }}" class="delComment">删除</a>
                             {% else %}
-                                <a href="#commentBody" comment_id="{{ con.id }}" comment_name="{{ con.user.nickname }}" class="reply">回复</a>
+                                <a comment_id="{{ con.id }}" comment_name="{{ con.user.nickname }}" class="reply">回复</a>
                                 <a href="#">引用</a>
                             {% endif %}
 
@@ -96,19 +97,25 @@
                             <a href="/blog/{{ con.user.nickname }}" id="user_nickname">{{ con.user.nickname }}</a>
                         </div>
                         <div class="commentContent">
-                            <div>
-                                {% if con.parent_comment_id %}
-                                    @<a href="">{{ con.parent_comment.user.nickname }}</a>
-                                {% endif %}
-                            </div>
-                            <div class="comment_body_content">
+                            {% if con.parent_comment_id %}
+                                   <div class="comment_body_content">
+                                     <div>
+                                         <a>@{{ con.parent_comment.user.nickname }}</a>
+                                     </div>
+                                    {{ con.content|safe}}
+                                   </div>
+                                {% else %}
+                                 <div class="comment_body_content">
 
-                                {{ con.content }}
+                                {{ con.content|safe}}
                             </div>
+                            {% endif %}
+
 
                             <div class="comment_vote">
-                                <a href="#" class="comment_digg">支持({{ con.up_count }})</a>
-                                <a href="#" class="comment_bury">反对(0)</a>
+                                <a class="comment_digg"
+                                   comment_id="{{ con.id }}">支持(<span>{{ con.up_count }}</span>)</a>
+                                <a href="#" class="comment_bury" comment_id="{{ con.id }}">反对(0)</a>
                             </div>
                         </div>
 
@@ -131,7 +138,7 @@
                 <div id="commentBody">
                     <form>
                         {% csrf_token %}
-                        <textarea name="" id="comment_content" cols="70" rows="15"></textarea> <br>
+                        <textarea name="" id="comment_content" cols="40" rows="15" style="width: 800px;height: 400px"></textarea> <br>
                         <input type="button" value="提交评论" id="subBtn">
                     </form>
                 </div>
@@ -141,10 +148,19 @@
         </div>
     </div>
 
-    <script src="/static/js/diggst.js"></script>
-    <script>
 
+    <script>
+{#        KindEditor.ready(function (K) {#}
+{#            window.editor = K.create('#comment_content', {#}
+{#                width: '700px',#}
+{#                height: '300px',#}
+{#                items: [#}
+{#                    'source', 'wordpaste', 'justifyfull', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold',#}
+{#                    'italic', 'image', 'link', 'emoticons'#}
+{#                ]#}
+{#            });#}
+{#        });#}
     </script>
 
-
+<script src="/static/js/diggst.js"></script>
 {% endblock article %}

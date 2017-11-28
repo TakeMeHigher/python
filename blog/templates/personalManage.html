@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/personalManage.css">
+    <script src="/static/kindeditor/kindeditor-all.js"></script>
+    <script src="/static/kindeditor/lang/zh-CN.js"></script>
+
+</head>
+<body>
+<nav class="navbar  navbar-fixed-top">
+    <div class="container-fluid ">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class=" navbar-header" id="navbar-user-nickname">
+            <a href="/blog/{{ user.username }}" style="color: white;text-decoration: none"> {{ user.nickname }}</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" id="navList">
+                <li><a href="/">首页</a></li>
+                <li><a href="#">园子</a></li>
+                <li><a href="#">新闻</a></li>
+                <li><a href="#">收藏</a></li>
+                <li><a href="/changePassword/">修改密码</a></li>
+                <li><a href="/logout/">退出</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+
+
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid" id="content_div">
+    <div class="row">
+        <div class="col-md-2" id="left_content">
+            <div class="panel panel-default">
+                <div class="panel panel-default">
+                    <div class="panel-heading ">操作</div>
+                    <div class="panel-body">
+                        <div><a href="/backManage/addArticle/">添加新随笔</a></div>
+                        <div><a href="">草稿箱</a></div>
+                        <div><a href="">设置默认编辑器</a></div>
+                        <div><a href="">博客备份</a></div>
+                        <div><a href="">博客搬家</a></div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading ">分类</div>
+                    <div class="panel-body">
+                        <div><a href="">编辑分类</a></div>
+                        {% for category in request.user.blog.category_set.all %}
+                            <div><a href="">{{ category.title }}({{ category.article_set.count }})</a></div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8" id="main_content">
+        {% block content %}
+            <div id="tab_nav">
+                <ul>
+                    <li><a id="TabPosts" href="" class="current_nav">随笔</a></li>
+                    <li><a id="TabArticles" href="">文章</a></li>
+                    <li><a id="TabDiary" href="">日记</a></li>
+                    <li><a id="TabFeedback" href="">评论</a></li>
+
+                    <li><a id="TabLinks" href="">链接</a></li>
+                    <li><a id="TabFavorites" href="">收藏</a></li>
+                    <li><a id="TabGalleries" href="x">相册</a></li>
+                    <li><a id="TabFiles" href="">文件</a></li>
+                    <li><a id="TabConfigure" href="">设置</a></li>
+                    <li><a id="TabPreferences" href="">选项</a></li>
+
+                </ul>
+                <div class="clear">
+                </div>
+            </div>
+            <div id="content_area">
+            {% csrf_token %}
+                <div id="post_list">
+                    <table cellpadding="0" cellspacing="0" border="0">
+                        <tbody class="table-hover">
+                        <tr>
+                            <th class="post-title">标题</th>
+                            <th class="publish-status">发布状态</th>
+                            <th>评论数</th>
+                            <th>阅读数</th>
+                            <th>操作</th>
+                            <th>操作</th>
+                        </tr>
+
+                        {% for article in request.user.article_set.all %}
+                           <tr>
+                            <td class="post-tilte">
+                                <a href="/blog/{{ request.user.username }}/p/{{ article.id }}/" class="post_title">{{ article.title }}</a>
+                            </td>
+                            <td>发布</td>
+                           <td>{{ article.comment_count }}</td>
+                           <td>{{ article.read_count }}</td>
+                           <td ><a href="" class="delArticle" article_id="{{ article.id }}">删除</a></td>
+                           <td><a href="">编辑</a></td>
+                           </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endblock %}
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="/static/jquery-3.2.1.min.js"></script>
+<script>
+    $(".delArticle").click(function () {
+        if(window.confirm("你确认要删除吗?")){
+        $.ajax({
+            url:"/backManage/delArticle/",
+            type:"POST",
+            data:{
+                article_id:$(this).attr("article_id"),
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            },
+            success:function (data) {
+                if(data=="ok"){
+                    $(this).parent().remove()
+                }
+            }
+        });
+    }
+    })
+</script>
+</html>

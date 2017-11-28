@@ -20,9 +20,12 @@ from django.conf import settings
 from django.views.static import serve
 urlpatterns = [
     url(r'^diggit/$', views.articleDiggit),
+    url(r'^commentDigg/$', views.commentDigg),
     url(r'^buryit/$', views.articleBuryit),
     url(r'^comment/$', views.articleComment),
     url(r'^delComment/$', views.delComment),
+
+    url(r'^commentTree/(?P<article_id>\d+)/$', views.commentTree),
 
     url(r'^(?P<username>.*)/p/(?P<article_id>[0-9]+)/$', views.articleDetail),
 

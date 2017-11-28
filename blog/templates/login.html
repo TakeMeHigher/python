@@ -68,6 +68,7 @@
                 $('#error').html('')
             }
 
+            var last_url=document.referrer
             $.ajax({
                 url: '/login/',
                 type: 'POST',
@@ -83,7 +84,7 @@
                         $("#error").html(data["msg"]);
                         setTimeout(foo, 3000)
                     } else {
-                        window.location.href = '/'
+                        window.location.href =last_url
                     }
                 }
             })

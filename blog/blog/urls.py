@@ -32,6 +32,7 @@ urlpatterns = [
 
     #个人站点首页
     url(r'^blog/',include("app01.urls") ),
+    url(r'^backManage/',include("backManage.urls") ),
 
     #media配置
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),

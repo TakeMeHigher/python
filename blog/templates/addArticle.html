@@ -1,12 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Title</title>
-</head>
-<body>
+{% extends "personalManage.html" %}
+{% block content %}
+    <div>
+        <strong> 添加文章</strong>
+    </div>
+    <div>
+        <form action="/backManage/addArticle/" method="POST" novalidate>
+            {% csrf_token %}
+            <label for="title">标题:</label>
+            <p style="width: 900px">{{ form.title }}{{ form.errors.title.0 }}</p>
+            <label for="">内容:</label>
+            <p>
+                {{ form.content }}{{ form.errors.content.0 }}
+            </p>
 
-</body>
-</html>
+
+            <p>
+                个人分类:
+                {{ form.category_id }}
+            </p>
+
+            <p>
+                标签分类:
+                {{ form.tag_ids }}
+            </p>
+
+            <p>
+                网站分类:
+
+                {{ form.siteArticleCategory_id }}
+            </p>
+
+            <p><input type="submit" value="发布文章" class="btn btn-primary"></p>
+        </form>
+    </div>
+
+    <script>
+
+        KindEditor.ready(function (K) {
+            window.editor = K.create('#article_content', {
+                width: '1100px',
+                height: '400px',
+                extraFileUploadParams: {
+                    csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+                },
+                uploadJson: "/backManage/uploadFile/"
+            });
+            {##}
+            {#            var editor=K.create("article_content");#}
+            {#            //获取html#}
+            {#            var html=editor.html();#}
+            {#            // 同步数据后可以直接取得textarea的value#}
+            {#            editor.sync();#}
+            {#            html=$("#article_content").val()#}
+        });
+
+    </script>
+{% endblock content %}

@@ -1,0 +1,166 @@
+/* 头**/
+.navbar {
+    background-color: #2aabd2;
+    height: 70px;
+}
+
+#navbar-user-nickname {
+    font-size: 24px;
+    margin-top: 16px;
+    margin-left: 20px;
+}
+
+#navList {
+    padding-right: 100px;
+    margin-top: 25px;
+
+}
+
+#navList >li >a {
+    color: white;
+}
+#navList >li >a:hover{
+    background: none;
+    font-size: 18px;
+}
+
+/*内容区*/
+
+#content_div{
+   margin-top: 85px;
+}
+
+
+
+
+#tab_nav {
+    font-size: 14px;
+    padding: 2px;
+
+    margin-left: -1px;
+}
+
+#tab_nav ul {
+    float: left;
+    margin-bottom: -1px;
+    list-style: none;
+    padding-left: 0;
+}
+
+
+#tab_nav li {
+    float: left;
+    margin-right: 3px;
+    padding: 0;
+}
+
+li {
+    display: list-item;
+    text-align: -webkit-match-parent;
+}
+
+
+/**table*/
+#content_area {
+    padding: 10px;
+    min-height: 400px;
+    border-left: 1px solid #6f736d;
+    margin-left: -1px;
+}
+
+
+#post_list {
+    margin-top: 20px;
+    margin-left: 10px;
+}
+
+
+#post_list table {
+    border-bottom: 3px solid #6b86b3;
+    margin: 0 0 8px 0;
+    width: 100%;
+}
+
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+        background-color: transparent;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+th {
+    text-align: left;
+        font-weight: bold;
+}
+
+td, th {
+    display: table-cell;
+    vertical-align: inherit;
+}
+
+td a{
+        background-color: transparent;
+    color: #337ab7;
+    text-decoration: none;
+
+}
+
+#post_list .post-title {
+    text-align: left;
+}
+
+
+#post_list td {
+    padding: 5px;
+
+    border-bottom: 1px solid #e6e6e6;
+    height: 22px;
+}
+
+#post_list table th.post-title {
+    width: auto;
+    padding-left: 5px;
+}
+
+#post_list .post-title {
+    text-align: left;
+}
+
+
+#post_list table th {
+    font-weight: bold;
+    color: inherit;
+    border-bottom: 1px solid #6b86b3;
+    width: 50px;
+    text-align: center;
+}
+
+
+#post_list table th.publish-status {
+    width: 70px;
+}
+
+#post_list .post-title {
+    text-align: left;
+}
+
+
+
+/**添加文章**/
+
+#title{
+    width: 800px;
+}

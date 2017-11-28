@@ -36,6 +36,7 @@ def login(request):
             if user:
                 #request.session['user']={"username":name,'id':user.id}
                 auth.login(request,user)
+
                 #request.session["username"] = name
                 login_dic["flag"] = True
             else:
@@ -307,7 +308,7 @@ def articleDiggit(request):
                 diggit_response["errors"]="未知错误"
         return  HttpResponse(json.dumps(diggit_response))
     else:
-        return redirect("/login/")
+        return HttpResponse('')
 
 #文章反对
 def articleBuryit(request):
@@ -333,40 +334,84 @@ def articleBuryit(request):
 
 #文章评论
 def articleComment(request):
-    article_id = request.POST.get("article_id")
-    user_id = request.user.id
-    content=request.POST.get("content")
-    parent_comment_id=request.POST.get("parent_comment_id")
-    comment_response={"flag":True,"errors":None,"comment_time":None}
-    print(parent_comment_id,'-----------------')
-    if not parent_comment_id:
-        with transaction.atomic():
-            comment=models.Comment.objects.create(article_id=article_id,user_id=user_id,content=content)
-            models.Article.objects.filter(id=article_id).update(comment_count=F("comment_count")+1)
+    if request.user.is_authenticated():
+        article_id = request.POST.get("article_id")
+        user_id = request.user.id
+        content=request.POST.get("content")
+        parent_comment_id=request.POST.get("parent_comment_id")
+        comment_response={"flag":True,"comment_time":None,"comment_id":None,"commnet_username":None}
+        if not parent_comment_id:
+            with transaction.atomic():
+                comment=models.Comment.objects.create(article_id=article_id,user_id=user_id,content=content)
+                models.Article.objects.filter(id=article_id).update(comment_count=F("comment_count")+1)
+        else:
+            comment=models.Comment.objects.create(article_id=article_id,user_id=user_id,content=content,parent_comment_id=parent_comment_id)
+            comment_response["parent_comment_nickname"]=comment.parent_comment.user.nickname
+        comment_response["comment_id"] = comment.id
+        comment_response["commnet_username"] = request.user.username
+        time=models.Comment.objects.filter(id=comment.id).extra(select={"comment_time":"strftime('%%Y-%%m-%%d %%H:%%M:%%S',create_time)"}).values_list("comment_time")
+        comment_response["comment_time"]=time[0][0]
+        print(comment_response)
+        return HttpResponse(json.dumps(comment_response))
     else:
-        comment=models.Comment.objects.create(article_id=article_id,user_id=user_id,content=content,parent_comment_id=parent_comment_id)
-
-    time=models.Comment.objects.filter(id=comment.id).extra(select={"comment_time":"strftime('%%Y-%%m-%%d %%H:%%M:%%S',create_time)"}).values_list("comment_time")
-    comment_response["comment_time"]=time[0][0]
-
-    return HttpResponse(json.dumps(comment_response))
+        return HttpResponse('')
 
 
-# #评论回复
-# def commentReply(request):
-#     article_id=request.POST.get("article_id")
-#     parent_comment_id=request.POST.get("parent_comment_id")
-#     content=request.POST.get("content")
-#     user_id=request.user.id
-#     print(article_id,parent_comment_id,content,"--------",user_id)
-#     return HttpResponse()
-
-
-
+#删除评论
 def delComment(request):
+    if request.user.is_authenticated():
+        comment_id=request.POST.get("comment_id")
+        models.Comment.objects.filter(id=comment_id).delete()
+        return HttpResponse("ok")
+    else:
+        return HttpResponse("")
+
+
+
+
+#评论树操作
+def commentTree(request,article_id):
+    comment_obj=models.Comment.objects.filter(article_id=article_id).all()
+    comment_list=models.Comment.objects.filter(article_id=article_id).values("id","content","parent_comment_id","user__nickname","create_time")
+
+    comment_dict={}
+
+    for comment in comment_list:
+        comment["children_comment"]=[]
+        comment["create_time"]=str(comment["create_time"])
+        comment_dict[comment["id"]]=comment
+
+    for comment in comment_list:
+        if comment["parent_comment_id"]:
+            comment_dict[comment["parent_comment_id"]]["children_comment"].append(comment)
+
+    comment_Tree=[]
+
+    for comment in comment_list:
+        if not comment["parent_comment_id"]:
+            comment_Tree.append(comment)
+    print(comment_Tree)
+
+    return HttpResponse(json.dumps(comment_Tree))
+
+
+#评论点赞
+def commentDigg(request):
     comment_id=request.POST.get("comment_id")
-    models.Comment.objects.filter(id=comment_id).delete()
-    return HttpResponse("ok")
+    user_id=request.user.id
+    commentUp=models.CommentUp.objects.filter(comment_id=comment_id,user_id=user_id)
+    commentUp_response={"flag":False,"error":None}
+    if commentUp:
+        commentUp_response["error"]="不能重复点赞"
+    else:
+        commentUp_response["flag"]=True
+        models.CommentUp.objects.create(user_id=user_id,comment_id=comment_id)
+
+        models.Comment.objects.filter(id=comment_id).update(up_count=F("up_count")+1)
+    return HttpResponse(json.dumps(commentUp_response))
+
+
+
 
 
 
