@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/categotyEdit.css">
+</head>
+<body>
+<nav class="navbar  navbar-fixed-top">
+    <div class="container-fluid ">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class=" navbar-header" id="navbar-user-nickname">
+            <a href="/blog/{{ user.username }}" style="color: white;text-decoration: none"> {{ user.nickname }}</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right" id="navList">
+                <li><a href="/">首页</a></li>
+                <li><a href="#">园子</a></li>
+                <li><a href="#">新闻</a></li>
+                <li><a href="#">收藏</a></li>
+                <li><a href="/changePassword/">修改密码</a></li>
+                <li><a href="/logout/">退出</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+
+
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid" id="topDiv">
+    <div class="row">
+        <div class="col-md-2">
+            <div>
+                <a href="/backManage/addArticle/"> >>添加新随笔</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="table">
+                <table class="table-responsive">
+                    <thead>
+                    <tr>
+                        <th width="200px">分类名称</th>
+                        <th width="200px">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    {% for category in request.user.blog.category_set.all %}
+                        <tr>
+                            <td>{{ category.title }}</td>
+                            <td>
+                                <button class="btn btn-primary editBtn" category_id="{{ category.id }}">编辑</button>
+                                <button class="btn btn-danger delBtn" category_id="{{ category.id }}">删除</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+            <div id="addCategory" style="margin-top: 50px; ">
+                <h3>添加分类</h3>
+                <form novalidate>
+                    {% csrf_token %}
+                    <label for="add_title">分类名称</label>
+                    <p><input type="text" name="add_title" id="add_title"></p>
+                    <button id="add_btn">提交</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-4 hide" id="edit_category">
+            <p>编辑分类</p>
+            <form>
+                {% csrf_token %}
+                <label for="edit_title">分类名称</label>
+                <p><input type="text" name="category_title" id="edit_title"></p>
+                <button id="edit_btn">提交</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+<script src="/static/jquery-3.2.1.min.js"></script>
+<script>
+
+    $("#add_btn").click(function () {
+        $.ajax({
+            url: "/backManage/addCategory/",
+            type: "POST",
+            data: {
+                title: $("#add_title").val(),
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            },
+
+            success: function (data) {
+                data = JSON.parse(data);
+                if(data.flag){
+                    s='<tr>\n' +
+                        '                            <td>'+data.category_title+'</td>\n' +
+                        '                            <td>\n' +
+                        '                                <button class="btn btn-primary editBtn" category_id="'+data.category_id+'">编辑</button>\n' +
+                        '                                <button class="btn btn-danger delBtn" category_id="'+data.category_id+'">删除</button>\n' +
+                        '                            </td>\n' +
+                        '                        </tr>'
+                }else{
+
+                }
+
+            }
+        })
+    })
+    $("#tbody").on("click", ".delBtn", function () {
+
+        $tr = $(this).parent().parent();
+        $.ajax({
+            url: "/backManage/delCategory/",
+            data: {
+                id: $(this).attr("category_id")
+            },
+            success: function (data) {
+                if (data == "ok") {
+                    $tr.remove()
+                }
+            }
+        })
+    })
+
+
+</script>
+
+<script>
+    var category_id = null;
+    $("#tbody").on("click", ".editBtn", function () {
+        value = $(this).parent().prev().html();
+        td = $(this).parent().prev();
+        $("#edit_category").removeClass("hide");
+        $("#edit_title").val(value);
+        category_id = $(this).attr("category_id");
+        alert(category_id)
+        $("#tbody").data("td", td)
+    });
+
+    $("#edit_btn").click(function () {
+        $.ajax({
+            url: "/backManage/editCategory/",
+            type: "POST",
+            data: {
+                id: category_id,
+                title: $("#edit_title").val(),
+                csrfmiddlewaretoken: $("[name='csrfmiddlewaretoken']").val()
+            },
+            success: function (data) {
+                if (data == "ok") {
+                    td.html($("#edit_title").val());
+
+                }
+            }
+        })
+
+    })
+
+</script>
+</html>

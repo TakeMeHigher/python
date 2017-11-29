@@ -52,9 +52,9 @@
                 <div class="panel panel-default">
                     <div class="panel-heading ">分类</div>
                     <div class="panel-body">
-                        <div><a href="">编辑分类</a></div>
+                        <div><a href="/backManage/categotyEdit/">编辑分类</a></div>
                         {% for category in request.user.blog.category_set.all %}
-                            <div><a href="">{{ category.title }}({{ category.article_set.count }})</a></div>
+                            <div><a href="/backManage/articleCategory/{{ category.title }}/">{{ category.title }}({{ category.article_set.count }})</a></div>
                         {% endfor %}
 
                     </div>
@@ -94,7 +94,7 @@
                             <th>操作</th>
                             <th>操作</th>
                         </tr>
-
+                        {% block table_tbody %}
                         {% for article in request.user.article_set.all %}
                            <tr>
                             <td class="post-tilte">
@@ -107,7 +107,7 @@
                            <td><a href="">编辑</a></td>
                            </tr>
                         {% endfor %}
-
+                         {% endblock table_tbody %}
                         </tbody>
                     </table>
                 </div>
@@ -131,7 +131,7 @@
             },
             success:function (data) {
                 if(data=="ok"){
-                    $(this).parent().remove()
+                    $(this).parent().parent().remove()
                 }
             }
         });

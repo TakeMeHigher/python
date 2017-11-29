@@ -24,6 +24,12 @@ urlpatterns = [
     url(r'^delArticle/$', views.delArticle),
     url(r'^addArticle/$', views.addArticle),
     url(r'^uploadFile/$', views.uploadFile),
+    url(r'^categotyEdit/$', views.categotyEdit),
+    url(r'^articleCategory/(?P<category_title>.*)/$', views.articleCategory),
+
+    url(r'^addCategory/$', views.addCategory),
+    url(r'^delCategory/$', views.delCategory),
+    url(r'^editCategory/$', views.editCategory),
 
 
 

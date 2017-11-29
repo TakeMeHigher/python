@@ -61,3 +61,45 @@ def delArticle(request):
     models.Article.objects.filter(id=article_id).delete()
 
     return HttpResponse("ok")
+
+#后台文章分类展示
+def articleCategory(request,category_title):
+    print(category_title,"------------------")
+    articles=models.Article.objects.filter(user=request.user,category__title=category_title).all()
+    print(articles)
+    return render(request,"backArticleCategory.html",{"articles":articles})
+
+#分类操作首页
+def categotyEdit(request):
+    return render(request,"categoryEdit.html")
+
+#添加分类
+def addCategory(request):
+    title=request.POST.get("title")
+    add_response={"flag":False,"error":None,"category_id":None,"category_title":None}
+    category=models.Category.objects.filter(title=title)
+    if not category:
+        blog=models.Blog.objects.filter(user=request.user).first()
+        category= models.Category.objects.create(blog=blog,title=title)
+        add_response["flag"]=True
+        add_response["category_id"]=category.id
+        add_response["category_title"]=category.title
+    else:
+        add_response["error"]="当前分类已存在"
+    print(add_response)
+    return HttpResponse(json.dumps(add_response))
+
+#删除分类
+def delCategory(request):
+    id=request.GET.get("id")
+    models.Category.objects.filter(id=id).delete()
+    return HttpResponse("ok")
+
+#编辑分类
+def editCategory(request):
+    id=request.POST.get("id")
+    title=request.POST.get("title")
+    print(id,'--------')
+    print(title,'-----')
+    models.Category.objects.filter(id=id).update(title=title)
+    return  HttpResponse("ok")

@@ -1,0 +1,31 @@
+/* 头**/
+.navbar {
+    background-color: #2aabd2;
+    height: 70px;
+}
+
+#navbar-user-nickname {
+    font-size: 24px;
+    margin-top: 16px;
+    margin-left: 20px;
+}
+
+#navList {
+    padding-right: 100px;
+    margin-top: 25px;
+
+}
+
+#navList >li >a {
+    color: white;
+}
+#navList >li >a:hover{
+    background: none;
+    font-size: 18px;
+}
+
+
+
+#topDiv{
+    margin-top: 80px;
+}

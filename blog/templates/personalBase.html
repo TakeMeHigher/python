@@ -12,6 +12,7 @@
     <script src="/static/jquery-3.2.1.min.js"></script>
     <script src="/static/kindeditor/kindeditor-all.js"></script>
     <script src="/static/kindeditor/lang/zh-CN.js"></script>
+{% load myFilter %}
 </head>
 <body>
 <nav class="navbar  navbar-fixed-top">
@@ -26,7 +27,7 @@
             <ul class="nav navbar-nav navbar-right" id="navList">
                 <li><a href="#">伯乐园</a></li>
                 <li><a href="/">首页</a></li>
-                <li><a href="#">新随笔</a></li>
+                <li><a href="/backManage/addArticle/">新随笔</a></li>
                 <li><a href="#">联系</a></li>
                 <li><a href="#">订阅</a></li>
                 <li><a href="/backManage/{{ request.user.username }}/manage/">管理</a></li>
@@ -45,7 +46,7 @@
                         <div id="author_news">
                             <a href=""> <img src="/media/{{ user.avatar }}" alt="" id="author_avatar"></a> <br><br>
                             昵称 : <a href="">{{ user.nickname }}</a> <br>
-                            圆龄 : <a href="">3年</a> <br>
+                            圆龄 : <a href="">{{ user.registTime|yunling }}天</a> <br>
                             粉丝 : <a href="">3000</a> <br>
                             关注 : <a href="">5</a>
                         </div>

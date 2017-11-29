@@ -65,7 +65,7 @@ function comment_error() {
 //提交评论
 $("#subBtn").click(function () {
     editor.sync()
-    if ($("#comment_content").val().charAt(0) != "@") {
+    if ($("#comment_content").val().charAt(0)!= "@") {
         parent_comment_id = null
     }
     var content = null;

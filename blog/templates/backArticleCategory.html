@@ -1,0 +1,17 @@
+{%  extends "personalManage.html"  %}
+
+
+{%  block table_tbody %}
+ {% for article in articles %}
+                           <tr>
+                            <td class="post-tilte">
+                                <a href="/blog/{{ request.user.username }}/p/{{ article.id }}/" class="post_title">{{ article.title }}</a>
+                            </td>
+                            <td>发布</td>
+                           <td>{{ article.comment_count }}</td>
+                           <td>{{ article.read_count }}</td>
+                           <td ><a href="" class="delArticle" article_id="{{ article.id }}">删除</a></td>
+                           <td><a href="">编辑</a></td>
+                           </tr>
+                        {% endfor %}
+{% endblock table_tbody %}
