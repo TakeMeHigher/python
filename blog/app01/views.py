@@ -380,7 +380,7 @@ def articleBuryit(request):
         return HttpResponse('')
 
 
-# 文章评论
+# 文章 评论
 def articleComment(request):
     if request.user.is_authenticated():
         article_id = request.POST.get("article_id")
@@ -411,7 +411,12 @@ def articleComment(request):
 def delComment(request):
     if request.user.is_authenticated():
         comment_id = request.POST.get("comment_id")
+        print(comment_id)
+        comment = models.Comment.objects.filter(id=comment_id).first()
         models.Comment.objects.filter(id=comment_id).delete()
+        id=comment.article_id
+        print(id)
+        models.Article.objects.filter(id=id).update(comment_count=F("comment_count")-1)
         return HttpResponse("ok")
     else:
         return HttpResponse("")
@@ -421,7 +426,7 @@ def delComment(request):
 def commentTree(request, article_id):
     comment_obj = models.Comment.objects.filter(article_id=article_id).all()
     comment_list = models.Comment.objects.filter(article_id=article_id).values("id", "content", "parent_comment_id",
-                                                                               "user__nickname", "create_time")
+                                                                               "user__nickname","user__avatar", "create_time")
 
     comment_dict = {}
 

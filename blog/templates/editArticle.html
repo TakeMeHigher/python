@@ -1,10 +1,10 @@
 {% extends "personalManage.html" %}
 {% block content %}
     <div>
-        <strong> 添加文章</strong>
+        <strong> 编辑文章</strong>
     </div>
     <div>
-        <form action="/backManage/addArticle/" method="POST" novalidate>
+        <form action="/backManage/editArticle/?id={{ article_id }}" method="POST" >
             {% csrf_token %}
             <label for="title">标题:</label>
             <p style="width: 900px">{{ form.title }}{{ form.errors.title.0 }}</p>
@@ -12,6 +12,8 @@
             <p>
                 {{ form.content }}{{ form.errors.content.0 }}
             </p>
+
+
             <p>
                 个人分类:
                 {{ form.category_id }}
@@ -28,7 +30,7 @@
                 {{ form.siteArticleCategory_id }}
             </p>
 
-            <p><input type="submit" value="发布文章" class="btn btn-primary"></p>
+            <p><input type="submit" value="保存修改" class="btn btn-primary"></p>
         </form>
     </div>
 

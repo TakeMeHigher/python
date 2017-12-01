@@ -104,7 +104,7 @@
                            <td>{{ article.comment_count }}</td>
                            <td>{{ article.read_count }}</td>
                            <td ><a href="" class="delArticle" article_id="{{ article.id }}">删除</a></td>
-                           <td><a href="">编辑</a></td>
+                           <td><a href="/backManage/editArticle/?id={{ article.id }}">编辑</a></td>
                            </tr>
                         {% endfor %}
                          {% endblock table_tbody %}

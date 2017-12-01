@@ -85,7 +85,7 @@
                                 <a href="#commentBody" comment_id="{{ con.id }}">修改</a>
                                 <a comment_id="{{ con.id }}" class="delComment">删除</a>
                             {% else %}
-                                <a comment_id="{{ con.id }}" comment_name="{{ con.user.nickname }}" class="reply">回复</a>
+                                <a comment_id="{{ con.id }}" comment_username="{{ con.user.username }}" comment_name="{{ con.user.nickname }}" class="reply">回复</a>
                                 <a href="#">引用</a>
                             {% endif %}
 
@@ -93,14 +93,15 @@
                         </div>
                         <div class="commentTile">
                             <a href="#3762185" class="layer">{{ forloop.counter }}楼</a>
+                            <img class="user_avatar" src="/media/{{ con.user.avatar }}" alt="">
                             <span>{{ con.create_time|date:"Y-m-d H:i:s" }}</span>
-                            <a href="/blog/{{ con.user.nickname }}" id="user_nickname">{{ con.user.nickname }}</a>
+                            <a href="/blog/{{ con.user.username }}/" id="user_nickname">{{ con.user.nickname }}</a>
                         </div>
                         <div class="commentContent">
                             {% if con.parent_comment_id %}
                                    <div class="comment_body_content">
                                      <div>
-                                         <a>@{{ con.parent_comment.user.nickname }}</a>
+                                         <a href="/blog/{{ con.parent_comment.user.username }}/">@{{ con.parent_comment.user.nickname }}</a>
                                      </div>
                                     {{ con.content|safe}}
                                    </div>
@@ -130,6 +131,7 @@
                         昵称：<input type="text" id="tbCommentAuthor" class="author" disabled="disabled" size="50"
                                   value="{{ request.user.nickname }}">
                     </p>
+                    <p class="hide " id="current_user_avatar">{{ request.user.avatar }}</p>
                 </div>
                 <div>
                     评论内容

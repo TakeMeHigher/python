@@ -118,7 +118,8 @@
     $("#tbody").on("click", ".delBtn", function () {
 
         $tr = $(this).parent().parent();
-        $.ajax({
+        if(confirm("你确认要删除吗?")){
+            $.ajax({
             url: "/backManage/delCategory/",
             data: {
                 id: $(this).attr("category_id")
@@ -129,6 +130,8 @@
                 }
             }
         })
+        }
+
     })
 
 
@@ -142,7 +145,6 @@
         $("#edit_category").removeClass("hide");
         $("#edit_title").val(value);
         category_id = $(this).attr("category_id");
-        alert(category_id)
         $("#tbody").data("td", td)
     });
 

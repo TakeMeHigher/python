@@ -31,11 +31,55 @@ def addArticle(request):
             # print(data.get("siteArticleCategory_id"))
             article=models.Article.objects.create(title=title,desc=desc,category_id=category_id,siteArticleCategory_id=siteArticleCategory_id,user_id=user_id)
             models.ArticleDetail.objects.create(article=article,content=content)
+            if tag_ids:
+                for id in tag_ids:
+                    models.Article2Tag.objects.create(article_id=article.id,tag_id=id)
+
             return render(request,"updateSuccess.html")
 
         return render(request,"addArticle.html",{"form":form})
     form=ArticleForm(user_id)
     return render(request,"addArticle.html",{"form":form})
+
+
+#编辑文章
+def editArticle(request):
+    user_id=request.user.id
+    article_id = request.GET.get("id")
+    article = models.Article.objects.filter(id=article_id).first()
+    print(article)
+    if request.method=="GET":
+
+        content=article.articledetail.content
+        tags=article.tags.all()
+        category_id = article.category_id
+        tag_ids=[tag.id for tag in tags]
+        siteArticleCategory_id=article.siteArticleCategory_id
+        form=ArticleForm(user_id,initial={"title":article.title,"content":content,"category_id":category_id,"tag_ids":tag_ids,"siteArticleCategory_id":siteArticleCategory_id})
+
+        return render(request,"editArticle.html",{"form":form,"article_id":article_id})
+    else:
+        form=ArticleForm(user_id,request.POST)
+        print(form)
+        if form.is_valid():
+            id=request.GET.get("id")
+            content=form.cleaned_data.pop("content")
+            form.cleaned_data["desc"]=content[:120]
+            print(form.cleaned_data["desc"])
+            tag_ids=form.cleaned_data.pop("tag_ids")
+
+            article=models.Article.objects.filter(id=id).first()
+            models.Article.objects.filter(id=id).update(**form.cleaned_data)
+            models.ArticleDetail.objects.filter(article_id=id).update(content=content)
+            tags=[]
+            article.tags.clear()
+            for tag_id in tag_ids:
+                tag=models.Tag.objects.filter(id=tag_id).first()
+                models.Article2Tag.objects.create(article_id=article.id,tag_id=tag_id)
+
+            return redirect("/backManage/"+request.user.username+"/manage/")
+
+
 
 
 #上传文件

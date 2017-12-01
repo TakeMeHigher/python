@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^(?P<username>.*)/manage/$', views.personalManage),
     url(r'^delArticle/$', views.delArticle),
     url(r'^addArticle/$', views.addArticle),
+    url(r'^editArticle/$', views.editArticle),
     url(r'^uploadFile/$', views.uploadFile),
     url(r'^categotyEdit/$', views.categotyEdit),
     url(r'^articleCategory/(?P<category_title>.*)/$', views.articleCategory),

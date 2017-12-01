@@ -162,7 +162,7 @@
     float: right;
 }
 #commentList{
-        border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     font-size: 14px;
     font-weight: bold;
     margin: 100px 0 10px;
@@ -179,6 +179,7 @@
 .commentTile .layer{
     color: #399ab2;
     text-decoration: none;
+
 }
 
 .comment_body_content{
@@ -236,4 +237,18 @@
 
 .comment{
     margin-left: 20px;
+    border: solid greenyellow 1px;
+
+}
+
+.user_avatar{
+    width: 30px;
+    height: 30px;
+}
+.content{
+    margin-left: 30px;
+}
+
+.commentTile_tree{
+    display: inline-block;
 }

@@ -64,7 +64,8 @@ function comment_error() {
 
 //提交评论
 $("#subBtn").click(function () {
-    editor.sync()
+    editor.sync();
+    user_avatar=$("#current_user_avatar").html();
     if ($("#comment_content").val().charAt(0)!= "@") {
         parent_comment_id = null
     }
@@ -109,11 +110,11 @@ $("#subBtn").click(function () {
                         '                        </div>\n' +
                         '                        <div class="commentTile">\n' +
                         '                            <a href="#3762185" class="layer">' + floor + '楼</a>\n' +
-                        '                            <span>' + date + '</span>\n' +
+                        '                            <img  class="user_avatar" src="/media/'+user_avatar+'" alt=""><span>' + date + '</span>\n' +
                         '                            <a href="">' + nickname + '</a>\n' +
                         '                        </div>\n' +
                         '                        <div class="commentContent">\n' +
-                        '                            <div> <a href="" >@' + data.parent_comment_nickname + '</a></div><div class="comment_body_content">\n' +
+                        '                            <div> <a >@' + data.parent_comment_nickname + '</a></div><div class="comment_body_content">\n' +
                         '                               ' + content + '\n' +
                         '                            </div>\n' +
                         '\n' +
@@ -136,7 +137,7 @@ $("#subBtn").click(function () {
                         '                        </div>\n' +
                         '                        <div class="commentTile">\n' +
                         '                            <a href="#3762185" class="layer">' + floor + '楼</a>\n' +
-                        '                            <span>' + date + '</span>\n' +
+                        '                             <img class="user_avatar" src="/media/'+user_avatar+'" alt=""><span>' + date + '</span>\n' +
                         '                            <a href="" style="color:#337ab7;">' + nickname + '</a>\n' +
                         '                        </div>\n' +
                         '                        <div class="commentContent">\n' +
@@ -152,22 +153,7 @@ $("#subBtn").click(function () {
                         '                    </div>';
                 }
 
-                // var s = '<div class="commentItem" >\n' +
-                //     '                        <div class="feedbackManage">\n' +
-                //     '                            &nbsp;&nbsp;\n' +
-                //     '                        </div>\n' +
-                //     '                        <div class="commentTile">\n' +
-                //     '                            <a href="#3762185" class="layer">' + floor + '楼</a>\n' +
-                //     '                            <span>' + date + '</span>\n' +
-                //     '                            <a href="">' + nickname + '</a>\n' +
-                //     '                        </div>\n' +
-                //     '                        <div class="commentContent">\n' +
-                //     '                            <div class="comment_body_content">\n' +
-                //     '                               ' + content + '\n' +
-                //     '                            </div>\n' +
-                //     '\n' +
-                //     '                        </div>\n' +
-                //     '                    </div>';
+
 
                 $("#comment_list").append(s);
 
@@ -188,15 +174,11 @@ $("#subBtn").click(function () {
 parent_comment_id = null;
 $("#comment_list").on("click", ".reply", function () {
     var currentUser_nickname = $(this).attr("comment_name");
-    alert(currentUser_nickname)
     comment_id = $(this).attr("comment_id");
-    // $("#comment_content").val("@" + currentUser_nickname + "\n");
-    //editor.html("@" + currentUser_nickname + "\n");
-    //$("#comment_content").focus();
-    //editor.focus();
     editor.html('');//清空原有内容
+    $("#subBtn").focus()
     editor.focus();//编辑器获得焦点
-    editor.appendHtml("@" + currentUser_nickname + "<br>")
+    editor.appendHtml("@" + currentUser_nickname + "<br>");
     parent_comment_id = $(this).attr("comment_id");
 
 
@@ -204,7 +186,7 @@ $("#comment_list").on("click", ".reply", function () {
 
 //删除评论
 $("#comment_list").on("click", ".delComment", function () {
-    parent_obj = $(this).parent().parent().parent()
+    parent_obj = $(this).parent().parent().parent();
     $.ajax({
         url: "/blog/delComment/",
         type: "POST",
@@ -240,10 +222,15 @@ function showCommentTree(comment_list) {
     $.each(comment_list, function (index, comment_dict) {
         create_time = comment_dict.create_time.slice(0, 19);
         var content = comment_dict["content"];
-        var comment_str = '<div>\n' +
-            '                        <span> <a>' + comment_dict.user__nickname + '</a></span>发表于<a>' + create_time + '</a>\n' +
-            '                    </div><div class="comment">\n' +
-            '                     <div class="content">' + content + '</div>';
+        var comment_str='<div class="comment" style="margin-top: 5px">\n' +
+            '                        <div>' +
+            '<div class="commentTile_tree" style="display: inline-block"><img src="/media/'+comment_dict.user__avatar+'" alt="" class="user_avatar"><span><a href="">'+ comment_dict.user__nickname+'</a></span> <a href="">'+create_time+'</a></div>' +
+            '<div class="feedbackManage">&nbsp;&nbsp;<span class="comment_actions"> <a  class="reply_tree" comment_name="'+comment_dict.user__nickname+'">回复</a> <a href="#">引用</a></span></div>' +
+            '</div>\n' +
+            '                        <div class="content">'+content+'</div><div class="comment_vote">\n' +
+            '                                <a class="comment_digg_tree" comment_id="">支持(<span>0</span>)</a>\n' +
+            '                                <a href="#" class="comment_bury_tree" comment_id="189">反对(0)</a>\n' +
+            '                            </div>' ;
 
         if (comment_dict["children_comment"]) {
             var child_str = showCommentTree(comment_dict["children_comment"]);
@@ -298,4 +285,5 @@ KindEditor.ready(function (K) {
         ]
     });
 });
+
 
