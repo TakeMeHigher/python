@@ -124,6 +124,18 @@ $("#subBtn").click(function () {
                         '                            </div>\n' +
                         '                        </div>\n' +
                         '                    </div>';
+
+               s_tree='<div class="comment" style="margin-top: 5px"> ' +
+                   '                                    <div>' +
+                   '           <div class="commentTile_tree" style="display: inline-block"><img src="/media/'+user_avatar+'" alt="" class="user_avatar"><span><a href="">'+nickname+'</a></span> <a href="">'+create_time+'</a></div>' +
+                   '            <div class="feedbackManage">&nbsp;&nbsp;<span class="comment_actions"> <a  class="reply_tree" comment_id="'+data.comment_id+'" comment_name="'+nickname+'">回复</a> <a href="#">引用</a></span></div>' +
+                   '            </div> ' +
+                   '                                   <div class="content">'+content+'</div><div class="comment_vote">' +
+                   '                                            <a class="comment_digg_tree" comment_id="'+data.comment_id +'">支持(<span>0</span>)</a>' +
+                   '                                            <a href="#" class="comment_bury_tree" comment_id="189">反对(0)</a>' +
+                   '                                     </div>';
+
+               parent_comment_tree.append(s_tree)
                 }
 
                 else {
@@ -151,6 +163,20 @@ $("#subBtn").click(function () {
                         '                            </div>\n' +
                         '                        </div>\n' +
                         '                    </div>';
+
+
+                s_tree='\'<div class="comment" style="margin-top: 5px"> ' +
+                   '                                   <div> ' +
+                   '            <div class="commentTile_tree" style="display: inline-block"><img src="/media/'+user_avatar+'" alt="" class="user_avatar"><span><a href="">'+ nickname +'</a></span> <a href="">'+create_time+'</a></div> ' +
+                   '            <div class="feedbackManage">&nbsp;&nbsp;<span class="comment_actions"> <a  class="reply_tree" comment_id="'+data.comment_id+'" comment_name="'+nickname+'">回复</a> <a href="#">引用</a></span></div> ' +
+                   '            </div> ' +
+                   '                                   <div class="content">'+content+'</div><div class="comment_vote"> ' +
+                   '                                           <a class="comment_digg_tree" comment_id="'+data.comment_id +'">支持(<span>0</span>)</a> ' +
+                   '                                           <a href="#" class="comment_bury_tree" comment_id="189">反对(0)</a> ' +
+                   '                                        </div>';
+
+
+                $("#commentTree").append(s_tree)
                 }
 
 
@@ -172,7 +198,9 @@ $("#subBtn").click(function () {
 
 //对评论进行评论
 parent_comment_id = null;
+
 $("#comment_list").on("click", ".reply", function () {
+
     var currentUser_nickname = $(this).attr("comment_name");
     comment_id = $(this).attr("comment_id");
     editor.html('');//清空原有内容
@@ -180,7 +208,8 @@ $("#comment_list").on("click", ".reply", function () {
     editor.focus();//编辑器获得焦点
     editor.appendHtml("@" + currentUser_nickname + "<br>");
     parent_comment_id = $(this).attr("comment_id");
-
+   parent_comment_tree =$(this).parent().parent()
+    alert(parent_comment_tree.html())
 
 });
 
@@ -225,11 +254,11 @@ function showCommentTree(comment_list) {
         var comment_str='<div class="comment" style="margin-top: 5px">\n' +
             '                        <div>' +
             '<div class="commentTile_tree" style="display: inline-block"><img src="/media/'+comment_dict.user__avatar+'" alt="" class="user_avatar"><span><a href="">'+ comment_dict.user__nickname+'</a></span> <a href="">'+create_time+'</a></div>' +
-            '<div class="feedbackManage">&nbsp;&nbsp;<span class="comment_actions"> <a  class="reply_tree" comment_name="'+comment_dict.user__nickname+'">回复</a> <a href="#">引用</a></span></div>' +
+            '<div class="feedbackManage">&nbsp;&nbsp;<span class="comment_actions"> <a  class="reply_tree" comment_id="'+comment_dict.id+'" comment_name="'+comment_dict.user__nickname+'">回复</a> <a href="#">引用</a></span></div>' +
             '</div>\n' +
             '                        <div class="content">'+content+'</div><div class="comment_vote">\n' +
-            '                                <a class="comment_digg_tree" comment_id="">支持(<span>0</span>)</a>\n' +
-            '                                <a href="#" class="comment_bury_tree" comment_id="189">反对(0)</a>\n' +
+            '                                <a class="comment_digg_tree" comment_id="">支持(<span>0</span>)</a>' +
+            '                                <a href="#" class="comment_bury_tree" comment_id="189">反对(0)</a>' +
             '                            </div>' ;
 
         if (comment_dict["children_comment"]) {
@@ -284,6 +313,22 @@ KindEditor.ready(function (K) {
             'italic', 'image', 'link', 'emoticons'
         ]
     });
+});
+
+
+//评论树评论
+var parent_nickanme=null;
+var parent_comment_id=null;
+var parent_comment_tree=null;
+$("#commentTree").on("click",".reply_tree",function () {
+     parent_comment_tree =$(this).parent().parent().parent().parent()
+
+    parent_nickanme=$(this).attr("comment_name");
+    parent_comment_id=$(this).attr("comment_id");
+    editor.html('');//清空原有内容
+    $("#subBtn").focus();
+    editor.focus();//编辑器获得焦点
+    editor.appendHtml("@" + parent_nickanme + "<br>");
 });
 
 
